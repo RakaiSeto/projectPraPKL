@@ -7,16 +7,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-
-
 type user struct {
 	Uname    string
-	Password string
+	Password []byte
 }
 
-func createUserProcess(w http.ResponseWriter, req *http.Request) {
+func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 	if req.Method != "POST" {
-		http.Error(w, http.StatusText(405), http.StatusForbidden)
+		http.Error(w, http.StatusText(403), http.StatusForbidden)
 		return
 	}
 
@@ -27,52 +25,51 @@ func createUserProcess(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	row := db.QueryRow("SELECT * FROM Customer WHERE uname = $1", uname)
+	row := db.QueryRow("SELECT * FROM customer WHERE uname = $1", uname)
 
 	usr := user{}
 	err := row.Scan(&usr.Uname, &usr.Password)
-	switch {
-	case err == sql.ErrNoRows:
-		http.NotFound(w, req)
+	if err == nil {
+		http.Error(w, "Username already exist", http.StatusBadRequest)
 		return
-	case err != nil:
-		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		return
+	} else if err != nil {
+		fmt.Println(err)
 	}
 
 	// get form values
-	user1 := user{}
-	user1.Uname = req.FormValue("uname")
-	user1.Password = req.FormValue("password")
+	password := req.FormValue("password")
+
 
 	// validate
-	if user1.Uname == "" || user1.Password == "" {
+	if uname == "" || password == "" {
 		http.Error(w, http.StatusText(400), http.StatusBadRequest)
 		return
 	}
 
 	// turn password to hash
-	bs, err := bcrypt.GenerateFromPassword([]byte(user1.Password), bcrypt.MinCost)
+	bs, err := bcrypt.GenerateFromPassword([]byte(password), 8)
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		fmt.Println(err)
 		return
 	}
-	user1.Password = string(bs)
 
-	// insert to DB
-	_, err = db.Exec("INSERT INTO Customer (uname, password) VALUES ($1, $2)", user1.Uname, user1.Password)
+	fmt.Println(password)
+
+	// insert user to DB
+	_, err = db.Exec("INSERT INTO Customer (uname, password) VALUES ($1, $2)", uname, bs)
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
-
-	executeTemplate(w, "created.gohtml", user1)
-
+	
 	fmt.Println("succesful")
+	
+	http.Redirect(w, req, "/login", http.StatusSeeOther)
 }
 
-func login(w http.ResponseWriter, req *http.Request) {
-	if req.Method != "GET" {
+func LoginProcess(w http.ResponseWriter, req *http.Request) {
+	if req.Method != "POST" {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
@@ -80,6 +77,7 @@ func login(w http.ResponseWriter, req *http.Request) {
 	// get form value
 	uname := req.FormValue("uname")
 	password := req.FormValue("password")
+	fmt.Println(password)
 
 	// validate
 	if uname == "" || password == "" {
@@ -88,7 +86,7 @@ func login(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// is username even there?
-	row := db.QueryRow("SELECT * FROM Customer WHERE uname = $1", uname)
+	row := db.QueryRow("SELECT * FROM customer WHERE uname = $1", uname)
 	usr := user{}
 	err := row.Scan(&usr.Uname, &usr.Password)
 	switch {
@@ -97,25 +95,59 @@ func login(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "Username do not match", http.StatusForbidden)
 		return
 	case err != nil:
-		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		http.Error(w, "Error", http.StatusInternalServerError)
+		fmt.Println(err)
 		return
 	}
 
-	// convert password from db AND form to byte before compare
-	bsForm, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	bsDB := []byte(usr.Password)
+	fmt.Println(usr.Password)
 
 	// compare
-	err = bcrypt.CompareHashAndPassword(bsDB, bsForm)
+	err = bcrypt.CompareHashAndPassword(usr.Password, []byte(password))
 	if err != nil {
 		http.Error(w, "Password do not match", http.StatusForbidden)
 		return
 	}
 
-	// session
+	// create session
+	createSession(w, req, uname)
+
+	fmt.Println("login successful")
+
+	http.Redirect(w, req, "/userHome", http.StatusSeeOther)
+}
+
+func UserHome(w http.ResponseWriter, r *http.Request) {
+	l := IsAlreadyLogin(w, r)
+	if !l {
+		http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
+		return
+	}
+	c, err := r.Cookie("session")
+	if err != nil {
+		panic(err)
+	}
+	s := dbSessions[c.Value]
+	UpdateLastActivity(w, r)
+	ExecuteTemplate(w, "userHome.gohtml", s.uname)
+}
+
+func Logout(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+
+	c, _ := r.Cookie("session")
+	// delete session from db
+	delete(dbSessions, c.Value)
+	// set cookie
+	c = &http.Cookie{
+		Name: "session",
+		Value: "",
+		MaxAge: -1,
+	}
+	http.SetCookie(w, c)
+
+	// clean dbSessions
+	cleanSessions()
 }
