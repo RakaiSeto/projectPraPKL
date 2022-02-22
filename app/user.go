@@ -5,11 +5,18 @@ import (
 	"fmt"
 	"net/http"
 	"golang.org/x/crypto/bcrypt"
+	"html/template"
 )
 
 type user struct {
 	Uname    string
 	Password []byte
+}
+
+var tpl *template.Template
+
+func init() {
+	tpl = template.Must(template.ParseGlob("app/templates/*"))
 }
 
 func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
@@ -129,7 +136,7 @@ func UserHome(w http.ResponseWriter, r *http.Request) {
 	}
 	s := dbSessions[c.Value]
 	UpdateLastActivity(w, r)
-	ExecuteTemplate(w, "userHome.gohtml", s.uname)
+	tpl.ExecuteTemplate(w, "userHome.html", s.uname)
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
@@ -150,4 +157,6 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	// clean dbSessions
 	cleanSessions()
+
+	http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
 }

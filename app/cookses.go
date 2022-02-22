@@ -72,3 +72,7 @@ func cleanSessions() {
 	}
 	dbSessionsCleaned = time.Now()
 }
+
+func IsCookie(w http.ResponseWriter, r *http.Request) {
+
+}

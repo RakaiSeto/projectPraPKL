@@ -2,13 +2,13 @@ package main
 
 import (
 	"net/http"
-	"github.com/RakaiSeto/projectPraPKL/config"
+	"github.com/RakaiSeto/projectPraPKL/app"
 	"html/template"
 )
 
 var tpl *template.Template
 
-func init() {tpl = template.Must(template.ParseGlob("templates/*"))}
+func init() {tpl = template.Must(template.ParseGlob("app/templates/*.html"))}
 
 func main() {
 	http.HandleFunc("/", index)
@@ -31,9 +31,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginForm(w http.ResponseWriter, r *http.Request) {
-	tpl.ExecuteTemplate(w, "login.gohtml", nil)
+	tpl.ExecuteTemplate(w, "login.html", nil)
 }
 
 func signupForm(w http.ResponseWriter, r *http.Request) {
-	tpl.ExecuteTemplate(w, "signup.gohtml", nil)
+	tpl.ExecuteTemplate(w, "signup.html", nil)
 }
