@@ -14,6 +14,7 @@
             background: -webkit-linear-gradient(90deg, hsla(213, 77%, 14%, 1) 0%, hsla(202, 27%, 45%, 1) 100%);
             filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#08203E", endColorstr="#557C93", GradientType=1 );
             min-height: 100%;
+            max-height: 100%;
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -24,20 +25,24 @@
 <body class="h-100 p-5">
     <div class="m-5">
         <h1 class="text-white text-center display-1">Welcome, {{.}}</h1>
-        <h1 class="text-white text-center display-5">What do you want to do?</h1>
+        <h1 class="text-white text-center display-5">Where do you want to go?</h1>
     </div>
     <div class="m-5">
         <div class="container">
             <div class="row align-items-center justify-content-around p-2">
                 <div class="d-grid gap-2 w-50 mb-4">
-                    <button class="btn m-2 btn-outline-light" type="button">Button</button>
-                    <button class="btn m-2 btn-outline-light" type="button">Button</button>
-                    <button class="btn m-2 btn-outline-light" type="button">Button</button>
+                    <a href="/orderList" class="btn m-2 btn-outline-light" role="button">Orders</a>
+                    <a href="/productList" class="btn m-2 btn-outline-light" role="button">Products</a>
                 </div>
             </div>
             <div class="align-items-center mx-auto d-flex justify-content-center">
                 <form action="/logout" method="post">
-                    <button method="submit" class="btn btn-secondary mt-2 m-auto">Logout</button>
+                    <button method="submit" class="btn btn-secondary mt-3 m-auto">Logout</button>
+                </form>
+            </div>
+            <div class="align-items-center mx-auto d-flex justify-content-center m-2">
+                <form action="/deleteUser" method="post">
+                    <button method="submit" class="btn btn-danger mt-2 m-auto" onclick="return confirm('are you sure want to delete the user')">Delete User</button>
                 </form>
             </div>
         </div>

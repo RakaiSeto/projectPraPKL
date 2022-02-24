@@ -17,7 +17,10 @@ func main() {
 	http.HandleFunc("/signupForm", signupForm)
 	http.HandleFunc("/signupProcess", config.CreateUserProcess)
 	http.HandleFunc("/userHome", config.UserHome)
+	http.HandleFunc("/orderList", config.OrderList)
+	http.HandleFunc("/addOrderForm", config.AddOrderForm)
 	http.HandleFunc("/logout", config.Logout)
+	http.HandleFunc("/deleteUser", config.DeleteUser)
 	http.ListenAndServe(":8080", nil)
 }
 

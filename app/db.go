@@ -3,8 +3,33 @@ package config
 import (
 	"database/sql"
 	"fmt"
+
 	_ "github.com/lib/pq"
 )
+
+type order struct{
+	id int
+	uname string
+	price int
+}
+
+type productOrder struct{
+	id int
+	orderid int
+	prodod int
+	qty int
+	otherdisc int
+	poprice int
+}
+
+type product struct {
+	id int
+	prodcode int
+	name string
+	catprice int
+	memprice int
+	discount int
+}
 
 var db *sql.DB
 

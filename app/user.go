@@ -160,3 +160,88 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
 }
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+
+	c, _ := r.Cookie("session")
+
+	s := dbSessions[c.Value].uname
+	statement := `DELETE FROM customer WHERE uname =$1`
+	_, err := db.Exec(statement, s)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprintf(w, `we have encountered an error 
+		%v
+		please try again later`, err)
+		http.Redirect(w, r, "/", http.StatusInternalServerError)
+		return
+	}
+
+}
+
+func OrderList(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+	
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+
+	rows, err := db.Query("SELECT * FROM fullOrder WHERE uname=$1", s)
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	defer rows.Close()
+	
+	ords := make([]order, 0)
+	for rows.Next() {
+		ord := order{}
+		err := rows.Scan(&ord.id, &ord.uname, &ord.price)
+		switch {
+		case err == sql.ErrNoRows:
+			tpl.ExecuteTemplate(w, "orderNil.html", s)
+			return
+		case err != nil:
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			return
+		}
+		ords = append(ords, ord)
+	}
+	if err = rows.Err(); err != nil {
+	http.Error(w, http.StatusText(500), 500)
+	fmt.Println(err)
+	return
+	}
+
+	tpl.ExecuteTemplate(w, "orderList.html", ords)
+}
+
+func AddOrderForm(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+
+	sqlStatement := `
+	INSERT INTO fullorder (custid, totalprice)
+	VALUES ($1, $2)`
+	_, err := db.Exec(sqlStatement, s, 0)
+	if err != nil {
+  		panic(err)
+	}
+
+	tpl.ExecuteTemplate(w, "productOrderListNil.html", s)
+}
