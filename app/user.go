@@ -61,8 +61,6 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Println(password)
-
 	// insert user to DB
 	_, err = db.Exec("INSERT INTO Customer (uname, password) VALUES ($1, $2)", uname, bs)
 	if err != nil {
@@ -84,7 +82,6 @@ func LoginProcess(w http.ResponseWriter, req *http.Request) {
 	// get form value
 	uname := req.FormValue("uname")
 	password := req.FormValue("password")
-	fmt.Println(password)
 
 	// validate
 	if uname == "" || password == "" {
@@ -106,8 +103,6 @@ func LoginProcess(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 		return
 	}
-
-	fmt.Println(usr.Password)
 
 	// compare
 	err = bcrypt.CompareHashAndPassword(usr.Password, []byte(password))
@@ -196,37 +191,39 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
 
-	rows, err := db.Query("SELECT * FROM fullOrder WHERE uname=$1", s)
+	rows, err := db.Query("SELECT * FROM fullOrder WHERE custid=$1", s)
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
+		fmt.Println(err)
 		return
 	}
 	defer rows.Close()
 	
-	ords := make([]order, 0)
+	ords := make([]Order, 0)
 	for rows.Next() {
-		ord := order{}
-		err := rows.Scan(&ord.id, &ord.uname, &ord.price)
-		switch {
-		case err == sql.ErrNoRows:
-			tpl.ExecuteTemplate(w, "orderNil.html", s)
-			return
-		case err != nil:
-			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		ord := Order{}
+		err := rows.Scan(&ord.Id, &ord.Uname, &ord.Price)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
 			return
 		}
 		ords = append(ords, ord)
 	}
 	if err = rows.Err(); err != nil {
-	http.Error(w, http.StatusText(500), 500)
-	fmt.Println(err)
-	return
+		http.Error(w, http.StatusText(500), 500)
+		return
 	}
-
+	
+	fmt.Println("reached")
+	fmt.Println(ords)
 	tpl.ExecuteTemplate(w, "orderList.html", ords)
 }
 
-func AddOrderForm(w http.ResponseWriter, r *http.Request) {
+func AddOrder(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
@@ -234,14 +231,16 @@ func AddOrderForm(w http.ResponseWriter, r *http.Request) {
 
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
+	h := createID(w, r, "fullOrder")
+	hNew := h + 1
 
 	sqlStatement := `
-	INSERT INTO fullorder (custid, totalprice)
-	VALUES ($1, $2)`
-	_, err := db.Exec(sqlStatement, s, 0)
+	INSERT INTO fullorder (id, custid, totalprice)
+	VALUES ($1, $2, $3)`
+	_, err := db.Exec(sqlStatement, hNew, s, 0)
 	if err != nil {
   		panic(err)
 	}
 
-	tpl.ExecuteTemplate(w, "productOrderListNil.html", s)
+	tpl.ExecuteTemplate(w, "productOrderList.html", nil)
 }

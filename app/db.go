@@ -7,13 +7,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type order struct{
-	id int
-	uname string
-	price int
+type Order struct{
+	Id int
+	Uname string
+	Price int
 }
 
-type productOrder struct{
+type ProductOrder struct{
 	id int
 	orderid int
 	prodod int
@@ -22,7 +22,7 @@ type productOrder struct{
 	poprice int
 }
 
-type product struct {
+type Product struct {
 	id int
 	prodcode int
 	name string

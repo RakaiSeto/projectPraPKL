@@ -18,7 +18,8 @@ func main() {
 	http.HandleFunc("/signupProcess", config.CreateUserProcess)
 	http.HandleFunc("/userHome", config.UserHome)
 	http.HandleFunc("/orderList", config.OrderList)
-	http.HandleFunc("/addOrderForm", config.AddOrderForm)
+	http.HandleFunc("/addOrder", config.AddOrder)
+	http.HandleFunc("/addProductOrderForm", addProductOrderForm)
 	http.HandleFunc("/logout", config.Logout)
 	http.HandleFunc("/deleteUser", config.DeleteUser)
 	http.ListenAndServe(":8080", nil)
@@ -39,4 +40,8 @@ func loginForm(w http.ResponseWriter, r *http.Request) {
 
 func signupForm(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "signup.html", nil)
+}
+
+func addProductOrderForm(w http.ResponseWriter, r *http.Request) {
+	tpl.ExecuteTemplate(w, "addProductOrder.html", nil)
 }
