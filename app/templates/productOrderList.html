@@ -50,14 +50,29 @@
               <tr>
                 <th scope="col">Prod ID</th>
                 <th scope="col">Qty</th>
+                <th scope="col">Before Discount</th>
                 <th scope="col">Other Discount</th>
-                <th scope="col">Price</th>
+                <th scope="col">Total Price</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody class="text-white">
-              <tr>
-                <td colspan="4" class="text-center"><h4>You have no product order</h4></td>
-              </tr>
+              {{range .}}
+                <tr>
+                  <td>{{.Prodid}}</td>
+                  <td>{{.Qty}}</td>
+                  <td>{{.Beforediscount}}</td>
+                  <td>{{.Otherdisc}}</td>
+                  <td>{{.Poprice}}</td>
+                  <td>
+                    <a href="/seeOrder?id={{.Id}}" class="btn btn-outline-info w-100">Update</a>
+                  </td>
+                  <td>
+                    <a href="/seeOrder?id={{.Id}}" class="btn btn-outline-danger w-100">Delete</a>
+                  </td>
+                </tr>
+              {{end}}
             </tbody>
           </table>
           <div class="align-items-center mx-auto d-flex justify-content-center m-2">

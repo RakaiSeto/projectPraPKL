@@ -11,15 +11,17 @@ type Order struct{
 	Id int
 	Uname string
 	Price int
+	Profit int
 }
 
 type ProductOrder struct{
-	id int
-	orderid int
-	prodod int
-	qty int
-	otherdisc int
-	poprice int
+	Id int
+	Orderid int
+	Prodid int
+	Qty int
+	Beforediscount int
+	Otherdisc int
+	Poprice int
 }
 
 type Product struct {

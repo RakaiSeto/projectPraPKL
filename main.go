@@ -19,6 +19,7 @@ func main() {
 	http.HandleFunc("/userHome", config.UserHome)
 	http.HandleFunc("/orderList", config.OrderList)
 	http.HandleFunc("/addOrder", config.AddOrder)
+	http.HandleFunc("/deleteOrder", config.DeleteOrder)
 	http.HandleFunc("/addProductOrderForm", addProductOrderForm)
 	http.HandleFunc("/logout", config.Logout)
 	http.HandleFunc("/deleteUser", config.DeleteUser)

@@ -40,24 +40,32 @@
         </div>
       </nav>
 
-      <div class="h-100 text-white p-5">
+      <div class="h-100 text-white mx-auto p-5 mx-5 w-75">
           <h1 class="display-4 text-center mb-3">List of orders</h1>
-          <table class="table align-middle" style="margin-bottom: 20.8%;">
+          <table class="table align-middle p-5 bg-dark" style="margin-bottom: 20.8%; opacity: 80%;">
             <thead class="text-white" style="opacity: 80%;">
               <tr>
-                <th scope="col">ID</th>
                 <th scope="col">User Name</th>
                 <th scope="col">Price</th>
+                <th scope="col">Profit</th>
+                <th scope="col">Option</th>
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody class="text-white">
+            <tbody style="color: white;">
               {{range .}}
                 <tr>
-                  <td>{{.Id}}</td>
                   <td>{{.Uname}}</td>
                   <td>{{.Price}}</td>
-                  <td class="pr-4"><a href="/seeOrder?id={{.Id}}" class="btn btn-outline-info float-end">see order</a></td>
+                  <td>{{.Profit}}</td>
+                  <td>  
+                    <a href="/seeOrder?id={{.Id}}" class="btn btn-outline-info w-100">See order</a>
+                  </td>
+                  <td>
+                    <form action="/deleteOrder?id={{.Id}}" method="post">
+                      <button method="submit" class="btn btn-outline-danger w-100" onclick="return confirm('are you sure want to delete this order?')">Delete order</button>
+                    </form>
+                  </td>
                 </tr>
               {{end}}
             </tbody>

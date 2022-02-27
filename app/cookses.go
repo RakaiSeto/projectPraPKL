@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"database/sql"
 	_ "github.com/lib/pq"
 
 	uuid "github.com/satori/go.uuid"
@@ -51,23 +50,6 @@ func createSession(w http.ResponseWriter, r *http.Request, uname string) {
 
 	// insert to sesDB
 	dbSessions[c.Value] = session{uname, time.Now()}
-}
-
-func createID(w http.ResponseWriter, r *http.Request, tableName string) (highID int) {
-	row := db.QueryRow("SELECT id FROM $1 ORDER BY id DESC LIMIT 1;", tableName)
-	ord := Order{}
-	err := row.Scan(&ord.Id, &ord.Uname, &ord.Price)
-	switch {
-	case err == sql.ErrNoRows:
-		http.NotFound(w, r)
-		return
-	case err != nil:
-		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		fmt.Println(err)
-		return
-	}
-
-	return ord.Id
 }
 
 func UpdateLastActivity(w http.ResponseWriter, r *http.Request) {

@@ -57,12 +57,11 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 	bs, err := bcrypt.GenerateFromPassword([]byte(password), 8)
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		fmt.Println(err)
 		return
 	}
 
 	// insert user to DB
-	_, err = db.Exec("INSERT INTO Customer (uname, password) VALUES ($1, $2)", uname, bs)
+	_, err = db.Exec("INSERT INTO customer (uname, password) VALUES ($1, $2)", uname, bs)
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
@@ -207,6 +206,8 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
+		prof := (ord.Price / 100) * 23
+		ord.Profit = prof
 		ords = append(ords, ord)
 	}
 	if err = rows.Err(); err != nil {
@@ -231,16 +232,44 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
-	h := createID(w, r, "fullOrder")
-	hNew := h + 1
+	
+	ord := Order{}
+	id := db.QueryRow("SELECT * FROM fullorder ORDER BY id DESC LIMIT 1")
+	err := id.Scan(&ord.Id, &ord.Uname, &ord.Price)
+	
+	h := ord.Id
+	h++
+	if err == sql.ErrNoRows {
+		h = 1 
+		fmt.Println(err)
+	}
 
 	sqlStatement := `
 	INSERT INTO fullorder (id, custid, totalprice)
 	VALUES ($1, $2, $3)`
-	_, err := db.Exec(sqlStatement, hNew, s, 0)
+	_, err = db.Exec(sqlStatement, h, s, 0)
 	if err != nil {
   		panic(err)
 	}
 
-	tpl.ExecuteTemplate(w, "productOrderList.html", nil)
+	http.Redirect(w, r, "/orderList", http.StatusSeeOther)
+}
+
+func DeleteOrder(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	id := r.FormValue("id")
+	_, err := db.Exec("DELETE FROM fullorder WHERE id=$1", id)
+	if err != nil {
+		panic(err)
+	}
+
+	http.Redirect(w, r, "/orderList", http.StatusSeeOther)
 }
