@@ -15,6 +15,7 @@ type session struct {
 }
 
 var dbSessions = map[string]session{} //"uname" : sesID + last Act
+var foid string
 var dbSessionsCleaned time.Time
 const sessionLength int = 300
 

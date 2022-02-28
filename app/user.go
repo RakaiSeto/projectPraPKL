@@ -215,8 +215,6 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	fmt.Println("reached")
-	fmt.Println(ords)
 	tpl.ExecuteTemplate(w, "orderList.html", ords)
 }
 
@@ -255,6 +253,46 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/orderList", http.StatusSeeOther)
 }
 
+func SeeOrder(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	foid = r.FormValue("id")
+
+	rows, err := db.Query("SELECT * FROM fullOrder WHERE orderid=$1", foid)
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		fmt.Println(err)
+		return
+	}
+	defer rows.Close()
+
+	pords := make([]Productorder, 0)	
+	for rows.Next() {
+		pord := Productorder{}
+		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Prodid, &pord.Qty, &pord.Otherdiscount, &pord.Poprice)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		beDisc := pord.Poprice + pord.Otherdiscount
+		pord.Beforediscount = beDisc
+		pords = append(pords, pord)
+	}
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	tpl.ExecuteTemplate(w, "productOrderList.html", pords)
+}
+
 func DeleteOrder(w http.ResponseWriter, r *http.Request) {
 	if !IsAlreadyLogin(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -272,4 +310,43 @@ func DeleteOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/orderList", http.StatusSeeOther)
+}
+
+// PRODUCT SECTION
+
+func ProductList(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+	
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	rows, err := db.Query("SELECT * FROM product")
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		fmt.Println(err)
+		return
+	}
+	defer rows.Close()
+
+	prods := make([]Product, 0)
+	for rows.Next() {
+		prod := Product{}
+		err := rows.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice, &prod.Memprice)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		prods = append(prods, prod)
+	}
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	tpl.ExecuteTemplate(w, "productList.html", prods)
 }

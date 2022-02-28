@@ -14,23 +14,21 @@ type Order struct{
 	Profit int
 }
 
-type ProductOrder struct{
+type Productorder struct{
 	Id int
 	Orderid int
 	Prodid int
 	Qty int
 	Beforediscount int
-	Otherdisc int
+	Otherdiscount int
 	Poprice int
 }
 
 type Product struct {
-	id int
-	prodcode int
-	name string
-	catprice int
-	memprice int
-	discount int
+	Prodcode int
+	Name string
+	Catprice int
+	Memprice int
 }
 
 var db *sql.DB

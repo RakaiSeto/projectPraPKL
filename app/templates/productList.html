@@ -33,7 +33,7 @@
                         <a class="nav-link" aria-current="page" href="/userHome">Home</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link" href="/productList">Product</a>
+                        <a class="nav-link" href="/orderList">Order</a>
                     </li>
                 </ul>
           </div>
@@ -41,13 +41,14 @@
       </nav>
 
       <div class="h-100 text-white mx-auto p-5 mx-5 w-75">
-          <h1 class="display-4 text-center mb-3">List of orders</h1>
+          <h1 class="display-4 text-center mb-3">List of products</h1>
           <table class="table align-middle p-5 bg-dark" style="margin-bottom: 20.8%; opacity: 80%;">
             <thead class="text-white" style="opacity: 80%;">
               <tr>
-                <th scope="col">User Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Profit</th>
+                <th scope="col">Code</th>
+                <th scope="col">Name</th>
+                <th scope="col">Catalog</th>
+                <th scope="col">Member</th>
                 <th scope="col">Option</th>
                 <th scope="col"></th>
               </tr>
@@ -55,16 +56,17 @@
             <tbody style="color: white;">
               {{range .}}
                 <tr>
-                  <td>{{.Uname}}</td>
-                  <td>{{.Price}}</td>
-                  <td>{{.Profit}}</td>
+                  <td>{{.Prodcode}}</td>
+                  <td>{{.Name}}</td>
+                  <td>{{.Catprice}}</td>
+                  <td>{{.Memprice}}</td>
                   <td>  
-                    <a href="/seeOrder?id={{.Id}}" class="btn btn-outline-info w-100">See order</a>
+                    <a href="/seeProduct?code={{.Prodcode}}" class="btn btn-outline-info w-100">See Product</a>
                   </td>
                   <td>
-                    <form action="/deleteOrder?id={{.Id}}" method="post">
-                      <form action="/deleteOrder?id={{.Id}}" method="post">
-                      <button method="submit" class="btn btn-outline-danger w-100" onclick="return confirm('are you sure want to delete this order?')">Delete order</button>
+                    <form action="/deleteProduct?code={{.Prodcode}}" method="post">
+                      <form action="/deleteProduct?code={{.Prodcode}}" method="post">
+                      <button method="submit" class="btn btn-outline-danger w-100" onclick="return confirm('are you sure want to delete this Product?')">Delete Product</button>
                     </form>
                   </td>
                 </tr>
@@ -72,7 +74,7 @@
             </tbody>
           </table>
           <div class="align-items-center mx-auto d-flex justify-content-center m-2">
-                <a method="submit" href="/addOrder" role="button" class="btn btn-primary mt-2 m-auto">Add Order</a>
+                <a method="submit" href="/addProduct" role="button" class="btn btn-primary mt-2 m-auto">Add Product</a>
           </div>
       </div>
 
