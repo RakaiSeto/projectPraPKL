@@ -22,7 +22,14 @@ func main() {
 	http.HandleFunc("/seeOrder", config.SeeOrder)
 	http.HandleFunc("/deleteOrder", config.DeleteOrder)
 	http.HandleFunc("/addProductOrderForm", addProductOrderForm)
+	http.HandleFunc("/addProductOrder", config.AddProductOrder)
+	http.HandleFunc("/updateProductOrder", config.UpdateProductOrderForm)
+	http.HandleFunc("/updateProductOrderProcess", config.UpdateProductOrder)
+	http.HandleFunc("/deleteProductOrder", config.DeleteProductOrder)
 	http.HandleFunc("/productList", config.ProductList)
+	http.HandleFunc("/addProductForm", addProduct)
+	http.HandleFunc("/addProduct", config.AddProduct)
+	http.HandleFunc("/deleteProduct", config.DeleteProduct)
 	http.HandleFunc("/logout", config.Logout)
 	http.HandleFunc("/deleteUser", config.DeleteUser)
 	http.ListenAndServe(":8080", nil)
@@ -48,3 +55,8 @@ func signupForm(w http.ResponseWriter, r *http.Request) {
 func addProductOrderForm(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "addProductOrder.html", nil)
 }
+
+func addProduct(w http.ResponseWriter, r *http.Request) {
+	tpl.ExecuteTemplate(w, "addProduct.html", nil)
+}
+

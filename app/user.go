@@ -3,9 +3,11 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"net/http"
-	"golang.org/x/crypto/bcrypt"
 	"html/template"
+	"net/http"
+	"strconv"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type user struct {
@@ -203,16 +205,14 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 		ord := Order{}
 		err := rows.Scan(&ord.Id, &ord.Uname, &ord.Price)
 		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			return
+			fmt.Println(err)
 		}
-		prof := (ord.Price / 100) * 23
+		prof := ((ord.Price / 100) * 23)
 		ord.Profit = prof
 		ords = append(ords, ord)
 	}
 	if err = rows.Err(); err != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
+		fmt.Println(err)
 	}
 	
 	tpl.ExecuteTemplate(w, "orderList.html", ords)
@@ -230,22 +230,17 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
-	
-	ord := Order{}
-	id := db.QueryRow("SELECT * FROM fullorder ORDER BY id DESC LIMIT 1")
-	err := id.Scan(&ord.Id, &ord.Uname, &ord.Price)
-	
-	h := ord.Id
-	h++
-	if err == sql.ErrNoRows {
-		h = 1 
-		fmt.Println(err)
+	 
+	if g == 0 {
+		g = 1 
+	} else {
+		g++
 	}
 
 	sqlStatement := `
 	INSERT INTO fullorder (id, custid, totalprice)
 	VALUES ($1, $2, $3)`
-	_, err = db.Exec(sqlStatement, h, s, 0)
+	_, err := db.Exec(sqlStatement, g, s, 0)
 	if err != nil {
   		panic(err)
 	}
@@ -265,11 +260,9 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 
 	foid = r.FormValue("id")
 
-	rows, err := db.Query("SELECT * FROM fullOrder WHERE orderid=$1", foid)
+	rows, err := db.Query("SELECT * FROM productorder WHERE orderid=$1", foid)
 	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
 		fmt.Println(err)
-		return
 	}
 	defer rows.Close()
 
@@ -278,7 +271,7 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 		pord := Productorder{}
 		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Prodid, &pord.Qty, &pord.Otherdiscount, &pord.Poprice)
 		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
+			fmt.Println(err)
 			return
 		}
 		beDisc := pord.Poprice + pord.Otherdiscount
@@ -286,8 +279,7 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 		pords = append(pords, pord)
 	}
 	if err = rows.Err(); err != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
+		fmt.Println(err)
 	}
 
 	tpl.ExecuteTemplate(w, "productOrderList.html", pords)
@@ -349,4 +341,182 @@ func ProductList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tpl.ExecuteTemplate(w, "productList.html", prods)
+}
+
+func AddProduct(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	prodcode := r.FormValue("prodcode")
+	name := r.FormValue("name")
+	catprice := r.FormValue("catprice")
+	memprice := r.FormValue("memprice")
+
+	_, err := db.Exec("INSERT INTO product (prodcode, name, catprice, memprice) VALUES ($1, $2, $3, $4)", prodcode, name, catprice, memprice)
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+	
+	fmt.Println("succesful")
+	http.Redirect(w, r, "/productList", http.StatusSeeOther)
+}
+
+func DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	code := r.FormValue("code")
+	_, err := db.Exec("DELETE FROM fullorder WHERE prodcode=$1", code)
+	if err != nil {
+		panic(err)
+	}
+
+	http.Redirect(w, r, "/productList", http.StatusSeeOther)
+}
+
+func AddProductOrder(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+	
+	if h == 0 {
+		h = 1
+	} else {
+		h++
+	}
+
+	prodcode := r.FormValue("prodcode")
+	prod := Product{}
+	row := db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodcode)
+	err := row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice, &prod.Memprice)
+
+	if err == sql.ErrNoRows {
+		http.Error(w, "No Product with that code", http.StatusBadRequest)
+		fmt.Println(err)
+	}
+
+	orderid := foid
+	qty := r.FormValue("qty")
+	t, err := strconv.Atoi(qty)
+	if err != nil {
+		panic(err)
+	}
+	beforediscount := (prod.Catprice * t)
+	discount := r.FormValue("otherdisc")
+	t, err = strconv.Atoi(discount)
+	if err != nil {
+		panic(err)
+	}
+	poprice := beforediscount - t
+
+	_, err = db.Exec("INSERT INTO productorder (id, orderid, procode, qty, discount, poprice) VALUES ($1, $2, $3, $4, $5, $6)", h, orderid, prodcode, qty, discount, poprice)
+	if err != nil {
+		panic(err)
+	}
+
+	row = db.QueryRow("SELECT * FROM fullorder WHERE id=$1", orderid)
+
+	fo := Order{}
+	err = row.Scan(&fo.Id, &fo.Uname, &fo.Price, &fo.Profit)
+	if err != nil {
+		panic(err)
+	}
+
+	fo.Price = fo.Price + poprice
+
+	_, err = db.Exec("UPDATE fullorder SET totalprice=$1 WHERE id=$2", fo.Price, fo.Id)
+	if err != nil {
+		panic(err)
+	}
+
+	te := foid
+	re := `/seeOrder?id=` + te
+
+	http.Redirect(w, r, re, http.StatusSeeOther)
+}
+
+func UpdateProductOrderForm(w http.ResponseWriter, r *http.Request) {
+	poid = r.FormValue("id")
+	tpl.ExecuteTemplate(w, "updateProductOrder.html", nil)
+}
+
+func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+
+	id := poid
+	prodcode := r.FormValue("prodcode")
+	prod := Product{}
+	row := db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodcode)
+	err := row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice, &prod.Memprice)
+
+	if err == sql.ErrNoRows {
+		http.Error(w, "No Product with that code", http.StatusBadRequest)
+		fmt.Println(err)
+	}
+
+	orderid := foid
+	qty := r.FormValue("qty")
+	t, err := strconv.Atoi(qty)
+	if err != nil {
+		panic(err)
+	}
+	beforediscount := (prod.Catprice * t)
+	discount := r.FormValue("otherdisc")
+	t, err = strconv.Atoi(discount)
+	if err != nil {
+		panic(err)
+	}
+	poprice := beforediscount - t
+
+	_, err = db.Exec("UPDATE productorder SET orderid = $1, prodcode = $2, qty = $3, discount = $4, poprice = $5 WHERE id=$6", orderid, prodcode, qty, discount, poprice, id)
+	if err != nil {
+		panic(err)
+	}
+
+	te := foid
+	re := `/seeOrder?id=` + te
+
+	http.Redirect(w, r, re, http.StatusSeeOther)
+}
+
+func DeleteProductOrder(w http.ResponseWriter, r *http.Request){
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	code := r.FormValue("id")
+
+	_, err := db.Exec("DELETE FROM productorder WHERE id=$1", code)
+	if err != nil {
+		panic(err)
+	}
+
+	http.Redirect(w, r, "/productOrderList", http.StatusSeeOther)
 }

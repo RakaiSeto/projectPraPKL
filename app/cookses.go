@@ -16,9 +16,11 @@ type session struct {
 
 var dbSessions = map[string]session{} //"uname" : sesID + last Act
 var foid string
+var poid string
 var dbSessionsCleaned time.Time
 const sessionLength int = 300
-
+var g int
+var h int
 
 
 func init() {dbSessionsCleaned = time.Now()}
