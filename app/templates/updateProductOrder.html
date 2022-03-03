@@ -60,16 +60,27 @@
           </div>
         </div>
         <div class="row g-3 p-2 justify-content-between">
-          <div class="col-5">
+          <div class="col-6">
+            <input type="number" class="form-control" placeholder="Current Catalog Price" name="curcat" required />
+          </div>
+          <div class="col-6">
+            <input type="number" class="form-control" placeholder="Current CPL Price" name="curcpl" required />
+          </div>
+        </div>
+        <div class="row g-3 p-2 justify-content-between">
+          <div class="col-2">
             <input type="number" class="form-control" placeholder="Qty" name="qty" required />
           </div>
-          <div class="col-7">
-            <input type="number" class="form-control" placeholder="Other Discount" name="otherdisc" required >
+          <div class="col-5">
+            <input type="number" class="form-control" placeholder="Other Discount" name="otherdisc" required />
+          </div>
+          <div class="col-5">
+            <input type="number" class="form-control" placeholder="Other Expenses" name="otherexp" required />
           </div>
         </div>
         <div class="row p-2">
           <div class="col-6">
-            <button type="submit" class="btn btn-primary">Update Product Order</button>
+            <button type="submit" class="btn btn-primary">Add Product Order</button>
           </div>
         </div>
       </form>

@@ -162,9 +162,11 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 
+	// get uname
 	c, _ := r.Cookie("session")
-
 	s := dbSessions[c.Value].uname
+	
+	// delete customer with said uname from db
 	statement := `DELETE FROM customer WHERE uname =$1`
 	_, err := db.Exec(statement, s)
 	if err != nil {
@@ -176,6 +178,8 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// redirect to login
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func OrderList(w http.ResponseWriter, r *http.Request) {
@@ -189,9 +193,11 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get uname
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
 
+	// select all order with said uname
 	rows, err := db.Query("SELECT * FROM fullOrder WHERE custid=$1", s)
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
@@ -200,10 +206,11 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 	
+	// put those rows inside ords
 	ords := make([]Order, 0)
 	for rows.Next() {
 		ord := Order{}
-		err := rows.Scan(&ord.Id, &ord.Uname, &ord.Price)
+		err := rows.Scan(&ord.Id, &ord.Uname, &ord.Price, &ord.Created)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -215,6 +222,7 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 	
+	// parse ords into template
 	tpl.ExecuteTemplate(w, "orderList.html", ords)
 }
 
@@ -228,23 +236,27 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get uname
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
 	 
-	if g == 0 {
-		g = 1 
-	} else {
-		g++
-	}
-
-	sqlStatement := `
-	INSERT INTO fullorder (id, custid, totalprice)
-	VALUES ($1, $2, $3)`
-	_, err := db.Exec(sqlStatement, g, s, 0)
+	// increment id
+	g = getNumber("foid")
+	g++
+	
+	// update g in database
+	_, err := db.Exec("UPDATE number SET value = $1 WHERE name = g", g) 
 	if err != nil {
   		panic(err)
 	}
 
+	// insert empty order into db
+	_, err = db.Exec("INSERT INTO fullorder (id, custid, totalprice) VALUES ($1, $2, $3)", g, s, 0)
+	if err != nil {
+  		panic(err)
+	}
+
+	// redirect to order list
 	http.Redirect(w, r, "/orderList", http.StatusSeeOther)
 }
 
@@ -258,30 +270,33 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// put id into variable
 	foid = r.FormValue("id")
 
+	// select all product order with said foid
 	rows, err := db.Query("SELECT * FROM productorder WHERE orderid=$1", foid)
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer rows.Close()
 
+	// put rows into pords
 	pords := make([]Productorder, 0)	
 	for rows.Next() {
 		pord := Productorder{}
-		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Prodid, &pord.Qty, &pord.Otherdiscount, &pord.Poprice)
+		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Procode, &pord.Qty, &pord.Discount, &pord.Poprice, &pord.Otherexp, &pord.Created, &pord.Otherdiscount)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		beDisc := pord.Poprice + pord.Otherdiscount
-		pord.Beforediscount = beDisc
+		
 		pords = append(pords, pord)
 	}
 	if err = rows.Err(); err != nil {
 		fmt.Println(err)
 	}
 
+	// parse pords into template
 	tpl.ExecuteTemplate(w, "productOrderList.html", pords)
 }
 
@@ -295,12 +310,22 @@ func DeleteOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get id
 	id := r.FormValue("id")
+
+	// delete order with said id
 	_, err := db.Exec("DELETE FROM fullorder WHERE id=$1", id)
 	if err != nil {
 		panic(err)
 	}
-
+	
+	// delete any product order with said foid
+	_, err = db.Exec("DELETE FROM productorder WHERE orderid=$1", id)
+	if err != nil {
+		panic(err)
+	}
+	
+	// redirect to order list
 	http.Redirect(w, r, "/orderList", http.StatusSeeOther)
 }
 
@@ -317,6 +342,7 @@ func ProductList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get all product
 	rows, err := db.Query("SELECT * FROM product")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
@@ -325,10 +351,11 @@ func ProductList(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 
+	// put rows into prods
 	prods := make([]Product, 0)
 	for rows.Next() {
 		prod := Product{}
-		err := rows.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice, &prod.Memprice)
+		err := rows.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			return
@@ -340,6 +367,7 @@ func ProductList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// parse prods into template
 	tpl.ExecuteTemplate(w, "productList.html", prods)
 }
 
@@ -353,18 +381,19 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get form values
 	prodcode := r.FormValue("prodcode")
 	name := r.FormValue("name")
 	catprice := r.FormValue("catprice")
-	memprice := r.FormValue("memprice")
 
-	_, err := db.Exec("INSERT INTO product (prodcode, name, catprice, memprice) VALUES ($1, $2, $3, $4)", prodcode, name, catprice, memprice)
+	// insert product into database
+	_, err := db.Exec("INSERT INTO product (prodcode, name, catprice) VALUES ($1, $2, $3)", prodcode, name, catprice)
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 	
-	fmt.Println("succesful")
+	// redirect to product list
 	http.Redirect(w, r, "/productList", http.StatusSeeOther)
 }
 
@@ -378,12 +407,16 @@ func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get code
 	code := r.FormValue("code")
+
+	// delete prooduct from database
 	_, err := db.Exec("DELETE FROM fullorder WHERE prodcode=$1", code)
 	if err != nil {
 		panic(err)
 	}
 
+	// redirect to product list
 	http.Redirect(w, r, "/productList", http.StatusSeeOther)
 }
 
@@ -397,63 +430,89 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	if h == 0 {
-		h = 1
-	} else {
-		h++
-	}
+	// increment id
+	h = getNumber("poid")
+	h++
 
+	// get product
 	prodcode := r.FormValue("prodcode")
 	prod := Product{}
 	row := db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodcode)
-	err := row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice, &prod.Memprice)
+	err := row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice)
 
 	if err == sql.ErrNoRows {
 		http.Error(w, "No Product with that code", http.StatusBadRequest)
 		fmt.Println(err)
 	}
 
+	// get order id
 	orderid := foid
+
+	// convert qty to int from form
 	qty := r.FormValue("qty")
-	t, err := strconv.Atoi(qty)
+	qtyConv, err := strconv.Atoi(qty)
 	if err != nil {
 		panic(err)
 	}
-	beforediscount := (prod.Catprice * t)
-	discount := r.FormValue("otherdisc")
-	t, err = strconv.Atoi(discount)
+	
+	// convert curcat to int from form
+	curcat := r.FormValue("curcat")
+	curcatConv, err := strconv.Atoi(curcat)
 	if err != nil {
 		panic(err)
 	}
-	poprice := beforediscount - t
+	
+	// count discount
+	discount := (prod.Catprice - curcatConv)
 
-	_, err = db.Exec("INSERT INTO productorder (id, orderid, procode, qty, discount, poprice) VALUES ($1, $2, $3, $4, $5, $6)", h, orderid, prodcode, qty, discount, poprice)
+	// get other discount and convert to int
+	otherdisc := r.FormValue("otherdisc")
+	otherdiscConv, err := strconv.Atoi(otherdisc)
+	if err != nil {
+		panic(err)
+	}
+	
+	// count po price
+	poprice := (prod.Catprice * qtyConv) - (discount * qtyConv) - otherdiscConv
+
+	// get other expenses and convert to int
+	otherexp := r.FormValue("otherexp")
+	otherexpConv, err := strconv.Atoi(otherexp)
+	if err != nil {
+		panic(err)
+	}
+	
+	// get current cpl price and convert to int
+	currentcpl := r.FormValue("curcpl")
+	currentcplConv, err := strconv.Atoi(currentcpl)
 	if err != nil {
 		panic(err)
 	}
 
-	row = db.QueryRow("SELECT * FROM fullorder WHERE id=$1", orderid)
+	// count profit
+	profit := poprice - (currentcplConv * qtyConv) - otherexpConv
 
+	// insert po into db 
+	_, err = db.Exec("INSERT INTO product order (id, orderid, prodcode, qty, discount, poprice, otherexp, otherdisc) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", h,  orderid, prod.Prodcode, qty, discount, poprice, otherexp, otherdisc)
+	if err != nil {
+		panic(err)
+	}
+
+	// get fullorder with said foid
 	fo := Order{}
-	err = row.Scan(&fo.Id, &fo.Uname, &fo.Price, &fo.Profit)
-	if err != nil {
-		panic(err)
+	row = db.QueryRow("SELECT id, totalprice, profit FROM fullorder WHERE id=$1", foid)
+	err = row.Scan(&fo.Id, &fo.Price, &fo.Profit)
+
+	// update full order with said foid
+	fo.Price += poprice
+	fo.Profit += profit
+
+	// reinsert to db
+	_, err = db.Exec("UPDATE fullorder SET totalprice = $1, profit = $2 WHERE id=$3", fo.Price, fo.Profit, foid)
 	}
-
-	fo.Price = fo.Price + poprice
-
-	_, err = db.Exec("UPDATE fullorder SET totalprice=$1 WHERE id=$2", fo.Price, fo.Id)
-	if err != nil {
-		panic(err)
-	}
-
-	te := foid
-	re := `/seeOrder?id=` + te
-
-	http.Redirect(w, r, re, http.StatusSeeOther)
-}
 
 func UpdateProductOrderForm(w http.ResponseWriter, r *http.Request) {
+	// save poid in var, parse update template
 	poid = r.FormValue("id")
 	tpl.ExecuteTemplate(w, "updateProductOrder.html", nil)
 }

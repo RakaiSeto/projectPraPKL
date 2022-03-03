@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders</title>
+    <title>Product Order</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
@@ -30,9 +30,6 @@
                           </svg></a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link disabled" aria-current="page" href="#">{{.}}</a>
-                    </li>
-                    <li class="nav-item mx-2">
                         <a class="nav-link" aria-current="page" href="/userHome">Home</a>
                     </li>
                     <li class="nav-item mx-2">
@@ -43,16 +40,18 @@
         </div>
       </nav>
 
-      <div class="h-100 text-white p-5">
-          <h1 class="display-4 text-center mb-3">List of orders</h1>
+      <div class="h-100 text-white p-4">
+          <h1 class="display-4 text-center mb-3">List of product orders</h1>
           <table class="table" style="margin-bottom: 20.8%;">
             <thead class="text-white" style="opacity: 80%;">
               <tr>
-                <th scope="col">Prod ID</th>
+                <th scope="col">Code</th>
                 <th scope="col">Qty</th>
-                <th scope="col">Before Discount</th>
-                <th scope="col">Other Discount</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Other discount</th>
+                <th scope="col">Expenses</th>
                 <th scope="col">Total Price</th>
+                <th scope="col">Created</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
               </tr>
@@ -62,9 +61,11 @@
                 <tr>
                   <td>{{.Prodid}}</td>
                   <td>{{.Qty}}</td>
-                  <td>{{.Beforediscount}}</td>
+                  <td>{{.Discount}}</td>
                   <td>{{.Otherdisc}}</td>
+                  <td>{{.Otherexp}}</td>
                   <td>{{.Poprice}}</td>
+                  <td>{{.Created}}</td>
                   <td>
                     <a href="/updateProductOrder?id={{.Id}}" class="btn btn-outline-info w-100">Update</a>
                   </td>

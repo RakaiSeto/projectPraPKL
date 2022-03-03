@@ -19,8 +19,8 @@ var foid string
 var poid string
 var dbSessionsCleaned time.Time
 const sessionLength int = 300
-var g int
-var h int
+var g int //keep track of full order id, will always increment
+var h int //keep track of product order id, will always increment
 
 
 func init() {dbSessionsCleaned = time.Now()}
@@ -77,6 +77,13 @@ func cleanSessions() {
 	dbSessionsCleaned = time.Now()
 }
 
-func IsCookie(w http.ResponseWriter, r *http.Request) {
+func getNumber(variable string) (value int) {
+	var temp int
+	row := db.QueryRow("SELECT value FROM number WHERE name=$1", variable)
+	err := row.Scan(temp)
+	if err != nil{
+		panic(err)
+	}
 
+	return temp
 }

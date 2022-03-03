@@ -3,7 +3,6 @@ package config
 import (
 	"database/sql"
 	"fmt"
-
 	_ "github.com/lib/pq"
 )
 
@@ -12,23 +11,26 @@ type Order struct{
 	Uname string
 	Price int
 	Profit int
+	Created string
 }
 
 type Productorder struct{
 	Id int
 	Orderid int
-	Prodid int
+	Procode int
 	Qty int
-	Beforediscount int
-	Otherdiscount int
+	Discount int
 	Poprice int
+	Otherexp int
+	Created string
+	Otherdiscount int
+	Profit int
 }
 
 type Product struct {
 	Prodcode int
 	Name string
 	Catprice int
-	Memprice int
 }
 
 var db *sql.DB

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +48,6 @@
                 <th scope="col">Code</th>
                 <th scope="col">Name</th>
                 <th scope="col">Catalog</th>
-                <th scope="col">Member</th>
                 <th scope="col">Option</th>
                 <th scope="col"></th>
               </tr>
@@ -59,14 +58,13 @@
                   <td>{{.Prodcode}}</td>
                   <td>{{.Name}}</td>
                   <td>{{.Catprice}}</td>
-                  <td>{{.Memprice}}</td>
                   <td>  
-                    <a href="/updateProduct?code={{.Prodcode}}" class="btn btn-outline-info w-100">Update Product</a>
+                    <a href="/updateProduct?code={{.Prodcode}}" class="btn btn-outline-info w-75">Update Product</a>
                   </td>
                   <td>
                     <form action="/deleteProduct?code={{.Prodcode}}" method="post">
                       <form action="/deleteProduct?code={{.Prodcode}}" method="post">
-                      <button method="submit" class="btn btn-outline-danger w-100" onclick="return confirm('are you sure want to delete this Product?')">Delete Product</button>
+                      <button method="submit" class="btn btn-outline-danger w-75" onclick="return confirm('are you sure want to delete this Product?')">Delete Product</button>
                     </form>
                   </td>
                 </tr>
