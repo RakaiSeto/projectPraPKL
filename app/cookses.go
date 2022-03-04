@@ -17,6 +17,7 @@ type session struct {
 var dbSessions = map[string]session{} //"uname" : sesID + last Act
 var foid string
 var poid string
+var prodid string
 var dbSessionsCleaned time.Time
 const sessionLength int = 300
 var g int //keep track of full order id, will always increment

@@ -397,6 +397,48 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/productList", http.StatusSeeOther)
 }
 
+func UpdateProductForm(w http.ResponseWriter, r *http.Request) {
+	// save product id in var, parse template
+	prodid = r.FormValue("code")
+	tpl.ExecuteTemplate(w, "updateProduct.html", prodid)
+}
+
+func UpdateProduct(w http.ResponseWriter, r *http.Request) {
+	if !IsAlreadyLogin(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	// get current product values
+	curProd := Product{}
+	row := db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodid)
+	err := row.Scan(&curProd.Prodcode, &curProd.Name, &curProd.Catprice)
+	if err == sql.ErrNoRows {
+		http.Error(w, "No Product with that code", http.StatusBadRequest)
+	}
+
+	// get value from form
+	name := r.FormValue("name")
+	catprice := r.FormValue("catprice")
+
+	// turn catprice to int
+	catpriceConv, err := strconv.Atoi(catprice)
+	if err != nil {
+		panic(err)
+	}
+
+	// update values
+	curProd.Name = name
+	curProd.Catprice = catpriceConv
+
+	// update in db
+	_, err = db.Exec("UPDATE product SET name = $1, catprice = $2 WHERE prodcode = $3", curProd.Name, curProd.Catprice, curProd.Prodcode)
+}
+
 func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	if !IsAlreadyLogin(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -509,7 +551,13 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 
 	// reinsert to db
 	_, err = db.Exec("UPDATE fullorder SET totalprice = $1, profit = $2 WHERE id=$3", fo.Price, fo.Profit, foid)
-	}
+
+
+	// redirect
+	url := "/seeOrder?id=" + foid
+
+	http.Redirect(w, r, url, http.StatusSeeOther)
+}
 
 func UpdateProductOrderForm(w http.ResponseWriter, r *http.Request) {
 	// save poid in var, parse update template
@@ -527,41 +575,100 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get current product order number
+	curPO := Productorder{}
+	row := db.QueryRow("SELECT * FROM productorder WHERE id=$1", poid)
+	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Procode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount)
+	if err != nil {
+		fmt.Println(err)
+	}
+	
+	// get current fullorder number
+	curFO := Order{}
+	row = db.QueryRow("SELECT * FROM fullorder WHERE id=$1", curPO.Orderid)
+	err = row.Scan(&curFO.Id, &curFO.Uname, &curFO.Price, &curFO.Created, &curFO.Profit)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	id := poid
+	// subtract current full order number with current product order number so it's back to before current product order is added
+	curFO.Price -= curPO.Poprice
+	curFO.Profit -= curPO.Profit
+
+	// get product
 	prodcode := r.FormValue("prodcode")
 	prod := Product{}
-	row := db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodcode)
-	err := row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice, &prod.Memprice)
-
+	row = db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodcode)
+	err = row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice)
 	if err == sql.ErrNoRows {
 		http.Error(w, "No Product with that code", http.StatusBadRequest)
 		fmt.Println(err)
 	}
 
-	orderid := foid
+	// convert qty to int from form
 	qty := r.FormValue("qty")
-	t, err := strconv.Atoi(qty)
+	qtyConv, err := strconv.Atoi(qty)
 	if err != nil {
 		panic(err)
 	}
-	beforediscount := (prod.Catprice * t)
-	discount := r.FormValue("otherdisc")
-	t, err = strconv.Atoi(discount)
+	
+	// convert curcat to int from form
+	curcat := r.FormValue("curcat")
+	curcatConv, err := strconv.Atoi(curcat)
 	if err != nil {
 		panic(err)
 	}
-	poprice := beforediscount - t
+	
+	// count discount
+	discount := (prod.Catprice - curcatConv)
 
-	_, err = db.Exec("UPDATE productorder SET orderid = $1, prodcode = $2, qty = $3, discount = $4, poprice = $5 WHERE id=$6", orderid, prodcode, qty, discount, poprice, id)
+	// get other discount and convert to int
+	otherdisc := r.FormValue("otherdisc")
+	otherdiscConv, err := strconv.Atoi(otherdisc)
+	if err != nil {
+		panic(err)
+	}
+	
+	// count po price
+	poprice := (prod.Catprice * qtyConv) - (discount * qtyConv) - otherdiscConv
+
+	// get other expenses and convert to int
+	otherexp := r.FormValue("otherexp")
+	otherexpConv, err := strconv.Atoi(otherexp)
+	if err != nil {
+		panic(err)
+	}
+	
+	// get current cpl price and convert to int
+	currentcpl := r.FormValue("curcpl")
+	currentcplConv, err := strconv.Atoi(currentcpl)
 	if err != nil {
 		panic(err)
 	}
 
-	te := foid
-	re := `/seeOrder?id=` + te
+	// count profit
+	profit := poprice - (currentcplConv * qtyConv) - otherexpConv
 
-	http.Redirect(w, r, re, http.StatusSeeOther)
+	// update product order in db
+	_, err = db.Exec("UPDATE productorder SET prodcode = $1, qty = $2, discount = $3, poprice = $4, otherexp = $5, otherdisc = $6 WHERE id=$7", prodcode, qty, discount, poprice, otherexp, otherdisc, poid)
+	if err != nil {
+		panic(err)
+	}
+
+	// update full order number to after updated
+	curFO.Price += poprice
+	curFO.Profit += profit
+
+	// update those number to FO database
+	_, err = db.Exec("UPDATE fullorder SET totalprice = $1, profit = $2 WHERE id = $3", curFO.Price, curFO.Profit, curFO.Id)
+	if err != nil {
+		panic(err)
+	}
+
+	// redirect
+	url := "/seeOrder?id=" + foid
+
+	http.Redirect(w, r, url, http.StatusSeeOther)
 }
 
 func DeleteProductOrder(w http.ResponseWriter, r *http.Request){

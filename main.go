@@ -29,6 +29,8 @@ func main() {
 	http.HandleFunc("/productList", config.ProductList)
 	http.HandleFunc("/addProductForm", addProduct)
 	http.HandleFunc("/addProduct", config.AddProduct)
+	http.HandleFunc("/updateProduct", config.UpdateProductForm)
+	http.HandleFunc("/updateProductProcess", config.UpdateProduct)
 	http.HandleFunc("/deleteProduct", config.DeleteProduct)
 	http.HandleFunc("/logout", config.Logout)
 	http.HandleFunc("/deleteUser", config.DeleteUser)
