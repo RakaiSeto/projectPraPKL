@@ -12,6 +12,7 @@ type Order struct{
 	Price int
 	Profit int
 	Created string
+	Role string
 }
 
 type Productorder struct{
@@ -25,6 +26,7 @@ type Productorder struct{
 	Created string
 	Otherdiscount int
 	Profit int
+	Role string
 }
 
 type Product struct {

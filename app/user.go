@@ -197,8 +197,8 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
 
-	// select all order with said uname
-	rows, err := db.Query("SELECT * FROM fullOrder WHERE custid=$1", s)
+	// select all order with said uname and role == "active"
+	rows, err := db.Query("SELECT * FROM fullOrder WHERE custid=$1 AND role=$2", s, "active")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		fmt.Println(err)
@@ -210,13 +210,10 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 	ords := make([]Order, 0)
 	for rows.Next() {
 		ord := Order{}
-		err := rows.Scan(&ord.Id, &ord.Uname, &ord.Price, &ord.Created)
+		err := rows.Scan(&ord.Id, &ord.Uname, &ord.Price, &ord.Created, &ord.Profit, &ord.Role)
 		if err != nil {
 			fmt.Println(err)
 		}
-		prof := ((ord.Price / 100) * 23)
-		ord.Profit = prof
-		ords = append(ords, ord)
 	}
 	if err = rows.Err(); err != nil {
 		fmt.Println(err)
@@ -251,7 +248,7 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// insert empty order into db
-	_, err = db.Exec("INSERT INTO fullorder (id, custid, totalprice) VALUES ($1, $2, $3)", g, s, 0)
+	_, err = db.Exec("INSERT INTO fullorder (id, custid, totalprice, profit, role) VALUES ($1, $2, $3, $4, $5)", g, s, 0, 0, "active")
 	if err != nil {
   		panic(err)
 	}
@@ -273,8 +270,8 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 	// put id into variable
 	foid = r.FormValue("id")
 
-	// select all product order with said foid
-	rows, err := db.Query("SELECT * FROM productorder WHERE orderid=$1", foid)
+	// select all product order with said foid and role == "active"
+	rows, err := db.Query("SELECT * FROM productorder WHERE orderid=$1 AND role=$2", foid, "active")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -284,7 +281,7 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 	pords := make([]Productorder, 0)	
 	for rows.Next() {
 		pord := Productorder{}
-		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Procode, &pord.Qty, &pord.Discount, &pord.Poprice, &pord.Otherexp, &pord.Created, &pord.Otherdiscount)
+		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Procode, &pord.Qty, &pord.Discount, &pord.Poprice, &pord.Otherexp, &pord.Created, &pord.Otherdiscount, &pord.Role)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -313,14 +310,14 @@ func DeleteOrder(w http.ResponseWriter, r *http.Request) {
 	// get id
 	id := r.FormValue("id")
 
-	// delete order with said id
-	_, err := db.Exec("DELETE FROM fullorder WHERE id=$1", id)
+	// update role of order with said id
+	_, err := db.Exec("UPDATE fullorder SET role = $1 WHERE id=$2", "deleted", id)
 	if err != nil {
 		panic(err)
 	}
 	
-	// delete any product order with said foid
-	_, err = db.Exec("DELETE FROM productorder WHERE orderid=$1", id)
+	// update role of any product order with said foid
+	_, err = db.Exec("UPDATE productorder SET role=$1 WHERE orderid=$2", "deleted", id)
 	if err != nil {
 		panic(err)
 	}
@@ -342,8 +339,8 @@ func ProductList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// get all product
-	rows, err := db.Query("SELECT * FROM product")
+	// get all product, sort it by code small to big
+	rows, err := db.Query("SELECT * FROM product ORDER BY prodcode ASC")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		fmt.Println(err)
@@ -535,7 +532,7 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 	profit := poprice - (currentcplConv * qtyConv) - otherexpConv
 
 	// insert po into db 
-	_, err = db.Exec("INSERT INTO product order (id, orderid, prodcode, qty, discount, poprice, otherexp, otherdisc) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", h,  orderid, prod.Prodcode, qty, discount, poprice, otherexp, otherdisc)
+	_, err = db.Exec("INSERT INTO product order (id, orderid, prodcode, qty, discount, poprice, otherexp, otherdisc, role, profit) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", h,  orderid, prod.Prodcode, qty, discount, poprice, otherexp, otherdisc, "active", profit)
 	if err != nil {
 		panic(err)
 	}
@@ -578,7 +575,7 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 	// get current product order number
 	curPO := Productorder{}
 	row := db.QueryRow("SELECT * FROM productorder WHERE id=$1", poid)
-	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Procode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount)
+	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Procode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount, &curPO.Role, &curPO.Profit)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -586,14 +583,10 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 	// get current fullorder number
 	curFO := Order{}
 	row = db.QueryRow("SELECT * FROM fullorder WHERE id=$1", curPO.Orderid)
-	err = row.Scan(&curFO.Id, &curFO.Uname, &curFO.Price, &curFO.Created, &curFO.Profit)
+	err = row.Scan(&curFO.Id, &curFO.Uname, &curFO.Price, &curFO.Created, &curFO.Profit, &curFO.Role)
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	// subtract current full order number with current product order number so it's back to before current product order is added
-	curFO.Price -= curPO.Poprice
-	curFO.Profit -= curPO.Profit
 
 	// get product
 	prodcode := r.FormValue("prodcode")
@@ -621,7 +614,7 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 	
 	// count discount
 	discount := (prod.Catprice - curcatConv)
-
+	
 	// get other discount and convert to int
 	otherdisc := r.FormValue("otherdisc")
 	otherdiscConv, err := strconv.Atoi(otherdisc)
@@ -645,7 +638,7 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-
+	
 	// count profit
 	profit := poprice - (currentcplConv * qtyConv) - otherexpConv
 
@@ -654,7 +647,11 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-
+	
+	// subtract current full order number with current product order number so it's back to before current product order is added
+	curFO.Price -= curPO.Poprice
+	curFO.Profit -= curPO.Profit
+	
 	// update full order number to after updated
 	curFO.Price += poprice
 	curFO.Profit += profit
@@ -679,10 +676,40 @@ func DeleteProductOrder(w http.ResponseWriter, r *http.Request){
 
 	code := r.FormValue("id")
 
-	_, err := db.Exec("DELETE FROM productorder WHERE id=$1", code)
+	// get current product order number
+	curPO := Productorder{}
+	row := db.QueryRow("SELECT * FROM productorder WHERE id=$1", poid)
+	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Procode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount, &curPO.Role, &curPO.Profit)
+	if err != nil {
+		fmt.Println(err)
+	}
+	
+	// get current fullorder number
+	curFO := Order{}
+	row = db.QueryRow("SELECT * FROM fullorder WHERE id=$1", curPO.Orderid)
+	err = row.Scan(&curFO.Id, &curFO.Uname, &curFO.Price, &curFO.Created, &curFO.Profit, &curFO.Role)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// update current fullorder number
+	curFO.Price -= curPO.Poprice
+	curFO.Profit -= curPO.Profit
+
+	// update current PO role
+	_, err = db.Exec("UPDATE productorder SET role = $1 WHERE id=$2", "deleted", code)
 	if err != nil {
 		panic(err)
 	}
 
-	http.Redirect(w, r, "/productOrderList", http.StatusSeeOther)
+	// update current FO in db
+	_, err = db.Exec("UPDATE fullorder SET totalprice = $1, profit = $2 WHERE id=$3", curFO.Price, curFO.Profit, curPO.Orderid)
+	if err != nil {
+		panic(err)
+	}
+
+	// redirect
+	url := "/seeOrder?id=" + fmt.Sprint(curPO.Orderid)
+
+	http.Redirect(w, r, url, http.StatusSeeOther)
 }
