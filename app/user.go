@@ -214,6 +214,7 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
+		ords = append(ords, ord)
 	}
 	if err = rows.Err(); err != nil {
 		fmt.Println(err)
@@ -242,7 +243,7 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	g++
 	
 	// update g in database
-	_, err := db.Exec("UPDATE number SET value = $1 WHERE name = g", g) 
+	_, err := db.Exec("UPDATE number SET value = $1 WHERE name=$2", g, "foid") 
 	if err != nil {
   		panic(err)
 	}
@@ -281,7 +282,7 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 	pords := make([]Productorder, 0)	
 	for rows.Next() {
 		pord := Productorder{}
-		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Procode, &pord.Qty, &pord.Discount, &pord.Poprice, &pord.Otherexp, &pord.Created, &pord.Otherdiscount, &pord.Role)
+		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Procode, &pord.Qty, &pord.Discount, &pord.Poprice, &pord.Otherexp, &pord.Created, &pord.Otherdiscount, &pord.Role, &pord.Profit)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -473,11 +474,17 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 	h = getNumber("poid")
 	h++
 
+	// update h in database
+	_, err := db.Exec("UPDATE number SET value = $1 WHERE name=$2", h, "poid") 
+	if err != nil {
+  		panic(err)
+	}
+
 	// get product
 	prodcode := r.FormValue("prodcode")
 	prod := Product{}
 	row := db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodcode)
-	err := row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice)
+	err = row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice)
 
 	if err == sql.ErrNoRows {
 		http.Error(w, "No Product with that code", http.StatusBadRequest)
@@ -532,7 +539,7 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 	profit := poprice - (currentcplConv * qtyConv) - otherexpConv
 
 	// insert po into db 
-	_, err = db.Exec("INSERT INTO product order (id, orderid, prodcode, qty, discount, poprice, otherexp, otherdisc, role, profit) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", h,  orderid, prod.Prodcode, qty, discount, poprice, otherexp, otherdisc, "active", profit)
+	_, err = db.Exec("INSERT INTO productorder (id, orderid, prodcode, qty, discount, poprice, otherexp, otherdisc, role, profit) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", h,  orderid, prod.Prodcode, qty, discount, poprice, otherexp, otherdisc, "active", profit)
 	if err != nil {
 		panic(err)
 	}

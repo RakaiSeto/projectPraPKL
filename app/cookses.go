@@ -81,7 +81,7 @@ func cleanSessions() {
 func getNumber(variable string) (value int) {
 	var temp int
 	row := db.QueryRow("SELECT value FROM number WHERE name=$1", variable)
-	err := row.Scan(temp)
+	err := row.Scan(&temp)
 	if err != nil{
 		panic(err)
 	}
