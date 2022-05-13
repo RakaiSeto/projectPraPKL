@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -30,7 +31,7 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 	// is taken?
 	uname := req.FormValue("uname")
 	if uname == "" {
-		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		http.Error(w, "please put a username", http.StatusBadRequest)
 		return
 	}
 
@@ -51,7 +52,7 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 
 	// validate
 	if uname == "" || password == "" {
-		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		http.Error(w, "input something", http.StatusBadRequest)
 		return
 	}
 
@@ -214,6 +215,14 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
+
+		t, err := time.Parse("2006-01-02T15:04:05Z", ord.Created)
+		if err != nil {
+			panic(err)
+		}
+
+		ord.Created = string(t.Format("02-01-2006"))
+
 		ords = append(ords, ord)
 	}
 	if err = rows.Err(); err != nil {
@@ -243,7 +252,7 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	g++
 	
 	// update g in database
-	_, err := db.Exec("UPDATE number SET value = $1 WHERE name=$2", g, "foid") 
+	_, err := db.Exec("UPDATE number SET value = $1 WHERE type=$2", g, "foid") 
 	if err != nil {
   		panic(err)
 	}
@@ -282,12 +291,19 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 	pords := make([]Productorder, 0)	
 	for rows.Next() {
 		pord := Productorder{}
-		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Procode, &pord.Qty, &pord.Discount, &pord.Poprice, &pord.Otherexp, &pord.Created, &pord.Otherdiscount, &pord.Role, &pord.Profit)
+		err := rows.Scan(&pord.Id, &pord.Orderid, &pord.Prodcode, &pord.Qty, &pord.Discount, &pord.Poprice, &pord.Otherexp, &pord.Created, &pord.Otherdiscount, &pord.Role, &pord.Profit)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		
+		t, err := time.Parse("2006-01-02T15:04:05Z", pord.Created)
+		if err != nil {
+			panic(err)
+		}
+
+		pord.Created = string(t.Format("02-01-2006"))
+
 		pords = append(pords, pord)
 	}
 	if err = rows.Err(); err != nil {
@@ -475,7 +491,7 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 	h++
 
 	// update h in database
-	_, err := db.Exec("UPDATE number SET value = $1 WHERE name=$2", h, "poid") 
+	_, err := db.Exec("UPDATE number SET value = $1 WHERE type=$2", h, "poid") 
 	if err != nil {
   		panic(err)
 	}
@@ -582,7 +598,7 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 	// get current product order number
 	curPO := Productorder{}
 	row := db.QueryRow("SELECT * FROM productorder WHERE id=$1", poid)
-	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Procode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount, &curPO.Role, &curPO.Profit)
+	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Prodcode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount, &curPO.Role, &curPO.Profit)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -686,7 +702,7 @@ func DeleteProductOrder(w http.ResponseWriter, r *http.Request){
 	// get current product order number
 	curPO := Productorder{}
 	row := db.QueryRow("SELECT * FROM productorder WHERE id=$1", poid)
-	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Procode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount, &curPO.Role, &curPO.Profit)
+	err := row.Scan(&curPO.Id, &curPO.Orderid, &curPO.Prodcode, &curPO.Qty, &curPO.Discount, &curPO.Poprice, &curPO.Otherexp, &curPO.Created, &curPO.Otherdiscount, &curPO.Role, &curPO.Profit)
 	if err != nil {
 		fmt.Println(err)
 	}

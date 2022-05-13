@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="min-height: 100%;">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,8 +13,6 @@
             background: -moz-linear-gradient(90deg, hsla(213, 77%, 14%, 1) 0%, hsla(202, 27%, 45%, 1) 100%);
             background: -webkit-linear-gradient(90deg, hsla(213, 77%, 14%, 1) 0%, hsla(202, 27%, 45%, 1) 100%);
             filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#08203E", endColorstr="#557C93", GradientType=1 );
-            min-height: 100%;
-            max-height: 100%;
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -22,7 +20,7 @@
 
     <title>User Home</title>
 </head>
-<body class="h-100 p-5">
+<body class="h-100 p-5" style="min-height: 100;">
     <div class="m-5">
         <h1 class="text-white text-center display-1">Welcome, {{.}}</h1>
         <h1 class="text-white text-center display-5">Where do you want to go?</h1>

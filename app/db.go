@@ -3,6 +3,7 @@ package app
 import (
 	"database/sql"
 	"fmt"
+
 	_ "github.com/lib/pq"
 )
 
@@ -18,7 +19,7 @@ type Order struct{
 type Productorder struct{
 	Id int
 	Orderid int
-	Procode int
+	Prodcode int
 	Qty int
 	Discount int
 	Poprice int

@@ -18,13 +18,9 @@ var dbSessions = map[string]session{} //"uname" : sesID + last Act
 var foid string
 var poid string
 var prodid string
-var dbSessionsCleaned time.Time
-const sessionLength int = 300
+const sessionLength int = 1800
 var g int //keep track of full order id, will always increment
 var h int //keep track of product order id, will always increment
-
-
-func init() {dbSessionsCleaned = time.Now()}
 
 func IsAlreadyLogin(w http.ResponseWriter, r *http.Request) bool {
 	c, err := r.Cookie("session")
@@ -75,12 +71,11 @@ func cleanSessions() {
 			delete(dbSessions, k)
 		}
 	}
-	dbSessionsCleaned = time.Now()
 }
 
 func getNumber(variable string) (value int) {
 	var temp int
-	row := db.QueryRow("SELECT value FROM number WHERE name=$1", variable)
+	row := db.QueryRow("SELECT value FROM number WHERE type=$1", variable)
 	err := row.Scan(&temp)
 	if err != nil{
 		panic(err)
