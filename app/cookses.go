@@ -1,4 +1,4 @@
-package config
+package app
 
 import (
 	"fmt"
@@ -44,7 +44,7 @@ func IsAlreadyLogin(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func createSession(w http.ResponseWriter, r *http.Request, uname string) {
-	sID, _ := uuid.NewV4()
+	sID := uuid.NewV4()
 	c := &http.Cookie{
 		Name: "session",
 		Value: sID.String(),
