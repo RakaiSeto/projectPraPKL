@@ -14,7 +14,7 @@ type session struct {
 	lastActivity time.Time
 }
 
-var dbSessions = map[string]session{} //"uname" : sesID + last Act
+var dbSessions = map[string]session{} //sesID : uname + last Act
 var foid string
 var poid string
 var prodid string
@@ -39,7 +39,7 @@ func IsAlreadyLogin(w http.ResponseWriter, r *http.Request) bool {
 	return ok
 }
 
-func createSession(w http.ResponseWriter, r *http.Request, uname string) {
+func createSession(w http.ResponseWriter, uname string, role string) {
 	sID := uuid.NewV4()
 	c := &http.Cookie{
 		Name: "session",
@@ -47,6 +47,8 @@ func createSession(w http.ResponseWriter, r *http.Request, uname string) {
 	}
 	c.MaxAge = sessionLength
 	http.SetCookie(w, c)
+
+	// put role in redis
 
 	// insert to sesDB
 	dbSessions[c.Value] = session{uname, time.Now()}
@@ -67,7 +69,7 @@ func UpdateLastActivity(w http.ResponseWriter, r *http.Request) {
 
 func cleanSessions() {
 	for k, v := range dbSessions {
-		if time.Since(v.lastActivity) > (time.Second * 30) {
+		if time.Since(v.lastActivity) > (time.Second * 1800) {
 			delete(dbSessions, k)
 		}
 	}
@@ -82,4 +84,13 @@ func getNumber(variable string) (value int) {
 	}
 
 	return temp
+}
+
+func createCookie(w http.ResponseWriter, name string, value string, expire int) {
+	c := &http.Cookie{
+		Name: name,
+		Value: value,
+		Expires: time.Now().Add(time.Duration(expire) * time.Second),
+	}
+	http.SetCookie(w, c)
 }

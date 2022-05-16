@@ -14,6 +14,7 @@ import (
 type user struct {
 	Uname    string
 	Password []byte
+	Role 	string
 }
 
 var tpl *template.Template
@@ -38,9 +39,9 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 	row := db.QueryRow("SELECT * FROM customer WHERE uname = $1", uname)
 
 	usr := user{}
-	err := row.Scan(&usr.Uname, &usr.Password)
+	err := row.Scan(&usr.Uname, &usr.Password, &usr.Role)
 	if err == nil {
-		http.Error(w, "Username already exist", http.StatusBadRequest)
+		http.Error(w, "Username already exist", http.StatusConflict)
 		return
 	} else if err != nil {
 		fmt.Println(err)
@@ -48,7 +49,6 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 
 	// get form values
 	password := req.FormValue("password")
-
 
 	// validate
 	if uname == "" || password == "" {
@@ -64,7 +64,7 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// insert user to DB
-	_, err = db.Exec("INSERT INTO customer (uname, password) VALUES ($1, $2)", uname, bs)
+	_, err = db.Exec("INSERT INTO customer (uname, password, role) VALUES ($1, $2, $3)", uname, bs, "customer")
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
@@ -87,18 +87,17 @@ func LoginProcess(w http.ResponseWriter, req *http.Request) {
 
 	// validate
 	if uname == "" || password == "" {
-		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		http.Error(w, http.StatusText(422), http.StatusUnprocessableEntity)
 		return
 	}
 
 	// is username even there?
 	row := db.QueryRow("SELECT * FROM customer WHERE uname = $1", uname)
 	usr := user{}
-	err := row.Scan(&usr.Uname, &usr.Password)
+	err := row.Scan(&usr.Uname, &usr.Password, &usr.Role)
 	switch {
 	case err == sql.ErrNoRows:
 		http.NotFound(w, req)
-		http.Error(w, "Username do not match", http.StatusForbidden)
 		return
 	case err != nil:
 		http.Error(w, "Error", http.StatusInternalServerError)
@@ -109,12 +108,12 @@ func LoginProcess(w http.ResponseWriter, req *http.Request) {
 	// compare
 	err = bcrypt.CompareHashAndPassword(usr.Password, []byte(password))
 	if err != nil {
-		http.Error(w, "Password do not match", http.StatusForbidden)
+		http.Error(w, "Password do not match", http.StatusUnauthorized)
 		return
 	}
 
 	// create session
-	createSession(w, req, uname)
+	createSession(w, uname, usr.Role)
 
 	fmt.Println("login successful")
 
@@ -167,20 +166,49 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
 	
-	// delete customer with said uname from db
-	statement := `DELETE FROM customer WHERE uname =$1`
-	_, err := db.Exec(statement, s)
+	// check if user has any fullOrder
+	row := db.QueryRow("SELECT id FROM fullOrder WHERE custid=$1", s)
+	ord := Order{}
+	err := row.Scan(&ord.Id)
+	if err == sql.ErrNoRows {
+		statement := `DELETE FROM customer WHERE uname = $1`
+		_, err = db.Exec(statement, s)
+		if err != nil {
+			fmt.Println(err)
+			fmt.Fprintf(w, `cannot delete customer 
+			%v
+			please try again later`, err)
+			return
+		}
+	
+		// redirect to login
+		http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
+	}
+	
+	// delete all full order with said uname
+	statement := `DELETE FROM fullOrder WHERE custid = $1`
+	_, err = db.Exec(statement, s)
 	if err != nil {
 		fmt.Println(err)
-		fmt.Fprintf(w, `we have encountered an error 
+		fmt.Fprintf(w, `cannot delete fullorder
 		%v
 		please try again later`, err)
-		http.Redirect(w, r, "/", http.StatusInternalServerError)
 		return
 	}
 
+	// delete customer with said uname from db
+	statement = `DELETE FROM customer WHERE uname = $1`
+	_, err = db.Exec(statement, s)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprintf(w, `cannot delete customer 
+		%v
+		please try again later`, err)
+		return
+	}
+	
 	// redirect to login
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
 }
 
 func OrderList(w http.ResponseWriter, r *http.Request) {
@@ -201,7 +229,7 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 	// select all order with said uname and role == "active"
 	rows, err := db.Query("SELECT * FROM fullOrder WHERE custid=$1 AND role=$2", s, "active")
 	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
+		http.Error(w, "order not found", http.StatusNotFound)
 		fmt.Println(err)
 		return
 	}
@@ -264,6 +292,7 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// redirect to order list
+	createCookie(w, "orderId", fmt.Sprint(g), 5)
 	http.Redirect(w, r, "/orderList", http.StatusSeeOther)
 }
 
@@ -400,14 +429,27 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
 	catprice := r.FormValue("catprice")
 
+	// check if product already exists
+	row := db.QueryRow("SELECT * FROM product WHERE prodcode=$1", prodcode)
+
+	prod := Product{}
+	err := row.Scan(&prod.Prodcode, &prod.Name, &prod.Catprice)
+	if err == nil {
+		http.Error(w, "Product already exist", http.StatusConflict)
+		return
+	} else if err != nil {
+		fmt.Println(err)
+	}
+
 	// insert product into database
-	_, err := db.Exec("INSERT INTO product (prodcode, name, catprice) VALUES ($1, $2, $3)", prodcode, name, catprice)
+	_, err = db.Exec("INSERT INTO product (prodcode, name, catprice) VALUES ($1, $2, $3)", prodcode, name, catprice)
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 	
 	// redirect to product list
+	createCookie(w, "productId", prodcode, 5)
 	http.Redirect(w, r, "/productList", http.StatusSeeOther)
 }
 
@@ -467,7 +509,7 @@ func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	// delete prooduct from database
-	_, err := db.Exec("DELETE FROM fullorder WHERE prodcode=$1", code)
+	_, err := db.Exec("DELETE FROM product WHERE prodcode=$1", code)
 	if err != nil {
 		panic(err)
 	}
