@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"time"
 	_ "github.com/lib/pq"
-
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -49,6 +48,10 @@ func createSession(w http.ResponseWriter, uname string, role string) {
 	http.SetCookie(w, c)
 
 	// put role in redis
+	err := rdb.HSet(ctx, "roledb", uname, role).Err()
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	// insert to sesDB
 	dbSessions[c.Value] = session{uname, time.Now()}
@@ -65,6 +68,18 @@ func UpdateLastActivity(w http.ResponseWriter, r *http.Request) {
 	s := dbSessions[c.Value]
 	s.lastActivity = time.Now()
 	dbSessions[c.Value] = s
+}
+
+func checkRole(uname string) string {
+	query, err := rdb.HGet(ctx, "roledb", uname).Result()
+	if err != nil {
+		panic(err)
+	}
+	return query
+}
+
+func deleteRedisSession(uname string) {
+	_ = rdb.HDel(ctx, "roledb", uname)
 }
 
 func cleanSessions() {

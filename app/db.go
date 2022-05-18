@@ -1,11 +1,19 @@
 package app
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
-
+	
+	"github.com/go-redis/redis/v8"
 	_ "github.com/lib/pq"
 )
+
+type Appuser struct {
+	Uname    string `json:"uname"`
+	Password string `json:"password"`
+	Role 	string `json:"role"`
+}
 
 type Order struct{
 	Id int
@@ -37,8 +45,12 @@ type Product struct {
 }
 
 var db *sql.DB
+var rdb *redis.Client
+var ctx = context.TODO()
 
 func init() {
+	var ctx = context.Background()
+
 	var err error
 
 	db, err = sql.Open("postgres", "postgres://postgres:password@localhost/prepkl?sslmode=disable")
@@ -51,4 +63,11 @@ func init() {
 		panic(err)
 	}
 	fmt.Println("You've connected to the database")
+
+	rdb = redis.NewClient(&redis.Options{
+        Addr:     "localhost:6379",
+        Password: "", // no password set
+        DB:       0,  // use default DB
+    })
+	fmt.Println(rdb.Ping(ctx).Result())
 }

@@ -1,9 +1,11 @@
 package main
 
 import (
-	"net/http"
-	"github.com/RakaiSeto/projectPraPKL/app"
 	"html/template"
+	"net/http"
+
+	"github.com/RakaiSeto/projectPraPKL/app"
+	"github.com/gin-gonic/gin"
 )
 
 var tpl *template.Template
@@ -11,12 +13,18 @@ var tpl *template.Template
 func init() {tpl = template.Must(template.ParseGlob("app/templates/*.html"))}
 
 func main() {
-	http.HandleFunc("/", index)
+	router := gin.Default()
+	router.GET("/user", app.GetAllAppusers)
+	router.GET("/user/:uname", app.GetAppuserByName)
+	router.POST("/user", app.PostAppuser)
+	router.PATCH("/user/:uname", app.PatchAppuser)
+	router.DELETE("/user/:uname", app.DeleteAppuser)
 	http.HandleFunc("/loginForm", loginForm)
 	http.HandleFunc("/loginProcess", app.LoginProcess)
 	http.HandleFunc("/signupForm", signupForm)
 	http.HandleFunc("/signupProcess", app.CreateUserProcess)
-	http.HandleFunc("/userHome", app.UserHome)
+	http.HandleFunc("/adminHome", app.AdminHome)
+	http.HandleFunc("/customerHome", app.CustomerHome)
 	http.HandleFunc("/orderList", app.OrderList)
 	http.HandleFunc("/addOrder", app.AddOrder)
 	http.HandleFunc("/seeOrder", app.SeeOrder)
@@ -34,17 +42,10 @@ func main() {
 	http.HandleFunc("/deleteProduct", app.DeleteProduct)
 	http.HandleFunc("/logout", app.Logout)
 	http.HandleFunc("/deleteUser", app.DeleteUser)
-	http.ListenAndServe(":8080", nil)
+	router.Run("localhost:8080")
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
-	l := app.IsAlreadyLogin(w, r)
-	if l{
-		http.Redirect(w, r, "/userHome", http.StatusSeeOther)
-	} else {
-		http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
-	}
-}
+
 
 func loginForm(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "login.html", nil)

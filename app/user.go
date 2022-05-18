@@ -8,16 +8,12 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type user struct {
-	Uname    string
-	Password []byte
-	Role 	string
-}
-
 var tpl *template.Template
+var router *gin.Engine
 
 func init() {
 	tpl = template.Must(template.ParseGlob("app/templates/*"))
@@ -36,15 +32,13 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	row := db.QueryRow("SELECT * FROM customer WHERE uname = $1", uname)
+	row := db.QueryRow("SELECT * FROM appuser WHERE uname = $1", uname)
 
-	usr := user{}
+	usr := Appuser{}
 	err := row.Scan(&usr.Uname, &usr.Password, &usr.Role)
 	if err == nil {
 		http.Error(w, "Username already exist", http.StatusConflict)
 		return
-	} else if err != nil {
-		fmt.Println(err)
 	}
 
 	// get form values
@@ -64,7 +58,7 @@ func CreateUserProcess(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// insert user to DB
-	_, err = db.Exec("INSERT INTO customer (uname, password, role) VALUES ($1, $2, $3)", uname, bs, "customer")
+	_, err = db.Exec("INSERT INTO appuser (uname, password, role) VALUES ($1, $2, $3)", uname, bs, "customer")
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
@@ -92,12 +86,12 @@ func LoginProcess(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// is username even there?
-	row := db.QueryRow("SELECT * FROM customer WHERE uname = $1", uname)
-	usr := user{}
+	row := db.QueryRow("SELECT * FROM appuser WHERE uname = $1", uname)
+	usr := Appuser{}
 	err := row.Scan(&usr.Uname, &usr.Password, &usr.Role)
 	switch {
 	case err == sql.ErrNoRows:
-		http.NotFound(w, req)
+		http.Error(w, "No such user", http.StatusNotFound)
 		return
 	case err != nil:
 		http.Error(w, "Error", http.StatusInternalServerError)
@@ -106,7 +100,7 @@ func LoginProcess(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// compare
-	err = bcrypt.CompareHashAndPassword(usr.Password, []byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(password))
 	if err != nil {
 		http.Error(w, "Password do not match", http.StatusUnauthorized)
 		return
@@ -115,12 +109,20 @@ func LoginProcess(w http.ResponseWriter, req *http.Request) {
 	// create session
 	createSession(w, uname, usr.Role)
 
-	fmt.Println("login successful")
-
-	http.Redirect(w, req, "/userHome", http.StatusSeeOther)
+	
+	switch {
+	case usr.Role == "admin":
+		fmt.Println("login successful, welcome admin @" + usr.Uname)
+		http.Redirect(w, req, "/adminHome", http.StatusSeeOther)
+		return
+	case usr.Role == "customer":
+		fmt.Println("login successful, @" + usr.Uname)
+		http.Redirect(w, req, "/customerHome", http.StatusSeeOther)
+		return
+	}
 }
 
-func UserHome(w http.ResponseWriter, r *http.Request) {
+func CustomerHome(w http.ResponseWriter, r *http.Request) {
 	l := IsAlreadyLogin(w, r)
 	if !l {
 		http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
@@ -131,9 +133,33 @@ func UserHome(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	s := dbSessions[c.Value]
+	role := checkRole(s.uname)
+	if role == "admin"{
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
+	}
 	UpdateLastActivity(w, r)
-	tpl.ExecuteTemplate(w, "userHome.html", s.uname)
+	tpl.ExecuteTemplate(w, "customerHome.html", s.uname)
 }
+
+func AdminHome(w http.ResponseWriter, r *http.Request) {
+	l := IsAlreadyLogin(w, r)
+	if !l {
+		http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
+		return
+	}
+	c, err := r.Cookie("session")
+	if err != nil {
+		panic(err)
+	}
+	s := dbSessions[c.Value]
+	role := checkRole(s.uname)
+	if role == "customer"{
+		http.Redirect(w, r, "/customerHome", http.StatusSeeOther)
+	}
+	UpdateLastActivity(w, r)
+	tpl.ExecuteTemplate(w, "adminHome.html", s.uname)
+}
+
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	if !IsAlreadyLogin(w, r) {
@@ -142,6 +168,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	c, _ := r.Cookie("session")
 	// delete session from db
+	deleteRedisSession(dbSessions[c.Value].uname)
 	delete(dbSessions, c.Value)
 	// set cookie
 	c = &http.Cookie{
@@ -165,24 +192,40 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	// get uname
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
-	
+	deleteRedisSession(s)
+
 	// check if user has any fullOrder
 	row := db.QueryRow("SELECT id FROM fullOrder WHERE custid=$1", s)
 	ord := Order{}
 	err := row.Scan(&ord.Id)
 	if err == sql.ErrNoRows {
-		statement := `DELETE FROM customer WHERE uname = $1`
+		statement := `DELETE FROM appuser WHERE uname = $1`
 		_, err = db.Exec(statement, s)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Fprintf(w, `cannot delete customer 
+			fmt.Fprintf(w, `cannot delete user 
 			%v
 			please try again later`, err)
 			return
 		}
 	
+		// delete session from db
+		deleteRedisSession(dbSessions[c.Value].uname)
+		delete(dbSessions, c.Value)
+		// set cookie
+		c = &http.Cookie{
+			Name: "session",
+			Value: "",
+			MaxAge: -1,
+		}
+		http.SetCookie(w, c)
+
+		// clean dbSessions
+		cleanSessions()
+
 		// redirect to login
 		http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
+		return
 	}
 	
 	// delete all full order with said uname
@@ -197,16 +240,30 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// delete customer with said uname from db
-	statement = `DELETE FROM customer WHERE uname = $1`
+	statement = `DELETE FROM appuser WHERE uname = $1`
 	_, err = db.Exec(statement, s)
 	if err != nil {
 		fmt.Println(err)
-		fmt.Fprintf(w, `cannot delete customer 
+		fmt.Fprintf(w, `cannot delete user 
 		%v
 		please try again later`, err)
 		return
 	}
 	
+	// delete session from db
+	deleteRedisSession(dbSessions[c.Value].uname)
+	delete(dbSessions, c.Value)
+	// set cookie
+	c = &http.Cookie{
+		Name: "session",
+		Value: "",
+		MaxAge: -1,
+	}
+	http.SetCookie(w, c)
+
+	// clean dbSessions
+	cleanSessions()
+
 	// redirect to login
 	http.Redirect(w, r, "/loginForm", http.StatusSeeOther)
 }
@@ -216,15 +273,18 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
-	
 	if !IsAlreadyLogin(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-
+	
 	// get uname
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
+	}
 
 	// select all order with said uname and role == "active"
 	rows, err := db.Query("SELECT * FROM fullOrder WHERE custid=$1 AND role=$2", s, "active")
@@ -274,7 +334,11 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	// get uname
 	c, _ := r.Cookie("session")
 	s := dbSessions[c.Value].uname
-	 
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
+	}
+	
 	// increment id
 	g = getNumber("foid")
 	g++
@@ -304,6 +368,14 @@ func SeeOrder(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
+	}
+
+	// check role
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
 	}
 
 	// put id into variable
@@ -353,6 +425,14 @@ func DeleteOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check error
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
+	}
+
 	// get id
 	id := r.FormValue("id")
 
@@ -383,6 +463,13 @@ func ProductList(w http.ResponseWriter, r *http.Request) {
 	if !IsAlreadyLogin(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
+	}
+
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "customer" {
+		http.Redirect(w, r, "/customerHome", http.StatusSeeOther)
 	}
 
 	// get all product, sort it by code small to big
@@ -424,6 +511,13 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "customer" {
+		http.Redirect(w, r, "/customerHome", http.StatusSeeOther)
+	}
+	
 	// get form values
 	prodcode := r.FormValue("prodcode")
 	name := r.FormValue("name")
@@ -454,6 +548,13 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateProductForm(w http.ResponseWriter, r *http.Request) {
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "customer" {
+		http.Redirect(w, r, "/customerHome", http.StatusSeeOther)
+	}
+	
 	// save product id in var, parse template
 	prodid = r.FormValue("code")
 	tpl.ExecuteTemplate(w, "updateProduct.html", prodid)
@@ -467,6 +568,13 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
+	}
+
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "customer" {
+		http.Redirect(w, r, "/customerHome", http.StatusSeeOther)
 	}
 
 	// get current product values
@@ -505,6 +613,13 @@ func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "customer" {
+		http.Redirect(w, r, "/customerHome", http.StatusSeeOther)
+	}
+
 	// get code
 	code := r.FormValue("code")
 
@@ -528,6 +643,13 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
+	}
+
 	// increment id
 	h = getNumber("poid")
 	h++
@@ -622,6 +744,13 @@ func AddProductOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateProductOrderForm(w http.ResponseWriter, r *http.Request) {
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
+	}
+
 	// save poid in var, parse update template
 	poid = r.FormValue("id")
 	tpl.ExecuteTemplate(w, "updateProductOrder.html", nil)
@@ -635,6 +764,13 @@ func UpdateProductOrder(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
+	}
+
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
 	}
 
 	// get current product order number
@@ -737,6 +873,13 @@ func DeleteProductOrder(w http.ResponseWriter, r *http.Request){
 	if !IsAlreadyLogin(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
+	}
+
+	c, _ := r.Cookie("session")
+	s := dbSessions[c.Value].uname
+	role := checkRole(s)
+	if role == "admin" {
+		http.Redirect(w, r, "/adminHome", http.StatusSeeOther)
 	}
 
 	code := r.FormValue("id")
