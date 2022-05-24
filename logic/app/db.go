@@ -4,15 +4,15 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	
 	"github.com/go-redis/redis/v8"
 	_ "github.com/lib/pq"
 )
 
 type Appuser struct {
+	Id 		 int	`json:"id"`
 	Uname    string `json:"uname"`
 	Password string `json:"password"`
-	Role 	string `json:"role"`
+	Role 	 string `json:"role"`
 }
 
 type Order struct{
@@ -49,7 +49,7 @@ var rdb *redis.Client
 var ctx = context.TODO()
 
 func init() {
-	var ctx = context.Background()
+	// var ctx = context.Background()
 
 	var err error
 

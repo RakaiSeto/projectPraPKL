@@ -39,7 +39,10 @@ func IsAlreadyLogin(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func createSession(w http.ResponseWriter, uname string, role string) {
-	sID := uuid.NewV4()
+	sID, err := uuid.NewV4()
+	if err != nil {
+		panic(err)
+	}
 	c := &http.Cookie{
 		Name: "session",
 		Value: sID.String(),
@@ -48,7 +51,7 @@ func createSession(w http.ResponseWriter, uname string, role string) {
 	http.SetCookie(w, c)
 
 	// put role in redis
-	err := rdb.HSet(ctx, "roledb", uname, role).Err()
+	err = rdb.HSet(ctx, "roledb", uname, role).Err()
 	if err != nil {
 		fmt.Println(err)
 	}
