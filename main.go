@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/RakaiSeto/projectPraPKL/logic/app"
+	"github.com/RakaiSeto/projectPraPKL/app"
 	"github.com/gin-gonic/gin"
 )
 

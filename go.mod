@@ -1,4 +1,4 @@
-module github.com/RakaiSeto/projectPraPKL/logic
+module github.com/RakaiSeto/projectPraPKL
 
 go 1.18
 
