@@ -9,6 +9,7 @@ import (
 type AppuserJSON struct {
 	Id    int `json:"id"`
 	Uname    string `json:"uname"`
+	Email    string `json:"email"`
 	Role 	string `json:"role"`
 }
 
@@ -23,7 +24,7 @@ type Response struct {
 }
 
 func GetAllAppusers(c *gin.Context) {
-	rows, err := db.Query("SELECT uname, role, id FROM testable")
+	rows, err := db.Query("SELECT id, uname, email, role FROM testable")
 	if err != nil {
 		panic(err)
 	}
@@ -32,7 +33,7 @@ func GetAllAppusers(c *gin.Context) {
 	users := make([]AppuserJSON, 0)
 	for rows.Next() {
 		user := AppuserJSON{}
-		err := rows.Scan(&user.Uname, &user.Role, &user.Id)
+		err := rows.Scan(&user.Id ,&user.Uname, &user.Email, &user.Role)
 		if err != nil {
 			panic(err)
 		}
@@ -43,8 +44,8 @@ func GetAllAppusers(c *gin.Context) {
 }
 
 func GetAppuserByName(c *gin.Context) {
-	uname := c.Param("uname")
-	row := db.QueryRow("SELECT uname, role FROM testable where uname=$1", uname)
+	id := c.Param("id")
+	row := db.QueryRow("SELECT uname, role FROM testable where uname=$1", id)
 
 	user := AppuserJSON{}
 	err := row.Scan(&user.Uname, &user.Role, &user.Id)

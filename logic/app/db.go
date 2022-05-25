@@ -63,10 +63,10 @@ func init() {
 	}
 	fmt.Println("You've connected to the database")
 
-	rdb = redis.NewClient(&redis.Options{
-        Addr:     "localhost:6379",
-        Password: "", // no password set
-        DB:       0,  // use default DB
-    })
-	fmt.Println(rdb.Ping(ctx).Result())
+	// rdb = redis.NewClient(&redis.Options{
+    //     Addr:     "localhost:6379",
+    //     Password: "", // no password set
+    //     DB:       0,  // use default DB
+    // })
+	// fmt.Println(rdb.Ping(ctx).Result())
 }
