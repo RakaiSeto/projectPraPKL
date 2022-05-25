@@ -57,7 +57,7 @@ func init() {
 
 	url := os.Getenv("DATABASE_URL")
     connection, _ := pq.ParseURL(url)
-    connection += "sslmode=required"
+    connection += "sslmode=require"
 
     db, err := sql.Open("postgres", connection)
     if err != nil {
