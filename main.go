@@ -43,7 +43,7 @@ func main() {
 	http.HandleFunc("/deleteProduct", app.DeleteProduct)
 	http.HandleFunc("/logout", app.Logout)
 	http.HandleFunc("/deleteUser", app.DeleteUser)
-	router.Run("localhost:8080")
+	router.Run(":8080")
 }
 
 
