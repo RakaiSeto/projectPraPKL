@@ -54,7 +54,6 @@ func init() {
 	var err error
 
 	db, err = sql.Open("postgres", "postgres://postgres:password@localhost/prepkl?sslmode=disable")
-
 	if err != nil {
 		panic(err)
 	}
