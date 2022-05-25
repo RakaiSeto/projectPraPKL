@@ -14,6 +14,7 @@ func init() {tpl = template.Must(template.ParseGlob("app/templates/*.html"))}
 
 func main() {
 	router := gin.Default()
+	router.GET("/", app.GetAllAppusers)
 	router.GET("/user", app.GetAllAppusers)
 	router.GET("/user/:uname", app.GetAppuserByName)
 	router.POST("/user", app.PostAppuser)
