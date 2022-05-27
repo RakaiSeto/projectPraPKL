@@ -2,7 +2,7 @@ package app
 
 import (
 	"net/http"
-
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,7 +26,7 @@ type Response struct {
 func GetAllAppusers(c *gin.Context) {
 	rows, err := db.Query("SELECT id, uname, email, role FROM testable")
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer rows.Close()
 

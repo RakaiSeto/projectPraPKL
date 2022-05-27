@@ -4,10 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"os"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type Appuser struct {
@@ -55,11 +54,7 @@ func init() {
 
 	var err error
 
-	url := os.Getenv("DATABASE_URL")
-    connection, _ := pq.ParseURL(url)
-    connection += "sslmode=disable"
-
-    db, err := sql.Open("postgres", connection)
+    db, err := sql.Open("postgres", "postgres://postgres:password@localhost/prepkl?sslmode=disable")
     if err != nil {
         panic(err)
     }

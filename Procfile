@@ -1,1 +1,1 @@
-web: projectPraPKL.exe
+web: go run main.go 
