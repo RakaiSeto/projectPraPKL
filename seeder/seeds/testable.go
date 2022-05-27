@@ -13,7 +13,7 @@ func (s Seed) Testable() {
 	var i int
 	err := row.Scan(&i)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	s.db.Exec("ALTER SEQUENCE testable_id_seq RESTART")
 	if i == 1{
