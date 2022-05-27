@@ -3,7 +3,6 @@ package main
 import (
 	"html/template"
 	"net/http"
-	"os"
 
 	"github.com/RakaiSeto/projectPraPKL/app"
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,6 @@ var tpl *template.Template
 func init() {tpl = template.Must(template.ParseGlob("app/templates/*.html"))}
 
 func main() {
-	port := os.Getenv("PORT")
 	router := gin.Default()
 	router.GET("/", app.GetAllAppusers)
 	router.GET("/user", app.GetAllAppusers)
@@ -45,7 +43,7 @@ func main() {
 	http.HandleFunc("/deleteProduct", app.DeleteProduct)
 	http.HandleFunc("/logout", app.Logout)
 	http.HandleFunc("/deleteUser", app.DeleteUser)
-	router.Run(":"+port)
+	router.Run()
 }
 
 
