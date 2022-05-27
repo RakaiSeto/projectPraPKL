@@ -1,3 +1,4 @@
+make.exe --dry-run --always-make --keep-going --print-directory
 make: Entering directory 'c:/Users/rakai/go/src/github.com/RakaiSeto/projectPraPKL'
 make: Leaving directory 'c:/Users/rakai/go/src/github.com/RakaiSeto/projectPraPKL'
  

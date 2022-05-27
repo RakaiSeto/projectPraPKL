@@ -1,1 +1,1 @@
-web: bin/heroku-tes-rakai
+web: bin
