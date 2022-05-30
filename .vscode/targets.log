@@ -7,9 +7,8 @@ make: *** No rule to make target 'all'.  Stop.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
-# Make data base, printed on Fri May 27 13:03:55 2022
+# Make data base, printed on Mon May 30 16:46:15 2022
 
 # Variables
 
@@ -24,7 +23,7 @@ USERPROFILE = C:\Users\rakai
 # environment
 LOCALAPPDATA = C:\Users\rakai\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-0c3434e3-2a9e-46d5-81fe-08d50ea2c4de-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-ce3ccbf1-e658-473e-a5f3-31f09a4ca17a-sock
 # environment
 VSCODE_CWD = C:\Users\rakai\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -34,7 +33,7 @@ SYSTEMROOT = C:\windows
 # environment
 PROCESSOR_LEVEL = 6
 # environment
-PSMODULEPATH = %ProgramFiles%\WindowsPowerShell\Modules;C:\windows\system32\WindowsPowerShell\v1.0\Modules
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\windows\system32\WindowsPowerShell\v1.0\Modules
 # default
 MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
 # environment
@@ -42,7 +41,7 @@ GOPATH = C:\Users\rakai\go
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16488_BBLSULPDXMZGOWWN
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_5656_ZBCWCSXDCJQOUOAN
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -100,7 +99,7 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 16488
+VSCODE_PID = 5656
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # environment
@@ -130,8 +129,7 @@ COMSPEC = C:\windows\system32\cmd.exe
 # environment
 WINDIR = C:\windows
 # environment
-MAKEL 
-EVEL := 0
+MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
@@ -214,6 +212,8 @@ GOPROXY = https://proxy.golang.org,direct
 SUFFIXES := 
 # environment
 ALLUSERSPROFILE = C:\ProgramData
+# environment
+SESSIONNAME = Console
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
 # environment
@@ -222,9 +222,8 @@ REGIONCODE = APJ
 PROCESSOR_REVISION = 8c01
 # environment
 PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 140 Stepping 1, GenuineIntel
-# variabl 
-e set hash-table stats:
-# Load=104/1024=10%, Rehash=0, Collisions=11/128=9%
+# variable set hash-table stats:
+# Load=105/1024=10%, Rehash=0, Collisions=11/129=9%
 
 # Pattern-specific Variable Values
 
@@ -232,9 +231,9 @@ e set hash-table stats:
 
 # Directories
 
-# . (key c:/Users/rakai/go/src/github.com/RakaiSeto/projectPraPKL, mtime 1653488109): 12 files, no impossibilities.
+# . (key c:/Users/rakai/go/src/github.com/RakaiSeto/projectPraPKL, mtime 1653903929): 6 files, no impossibilities.
 
-# 12 files, no impossibilities in 1 directories.
+# 6 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -272,8 +271,7 @@ makefile:
 # Not a target:
 makefile.mak:
 #  Implicit rule search has been done.
-#  File does n 
-ot exist.
+#  File does not exist.
 #  File has been updated.
 #  Failed to be updated.
 
@@ -292,12 +290,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 19 / storage = 136 B / avg = 7 B
-# current buf: size = 8174 B / used = 136 B / count = 19 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 13 / storage = 90 B / avg = 6 B
+# current buf: size = 8174 B / used = 90 B / count = 13 / avg = 6 B
 
-# strcache performance: lookups = 22 / hit rate = 13%
+# strcache performance: lookups = 16 / hit rate = 18%
 # hash-table stats:
-# Load=19/8192=0%, Rehash=0, Collisions=0/22=0%
-# Finished Make data base on Fri May 27 13:03:55 2022
+# Load=13/8192=0%, Rehash=0, Collisions=0/16=0%
+# Finished Make data base on Mon May 30 16:46:15 2022
 
  
