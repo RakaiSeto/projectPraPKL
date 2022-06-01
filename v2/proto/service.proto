@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "/service";
+message Empty {}
+
+// USER
+message User {
+    int64 id = 1;
+    string uname = 2;
+    string email = 3;
+    optional string password = 4;
+    string role = 5;
+}
+
+message Users {
+    repeated User User = 1;
+}
+
+message AddUserStatus {
+    string status = 1;
+    User User = 2;
+    optional string error = 3;
+}
+
+service AddUser {
+    rpc AllUser(Empty) returns (Users);
+    rpc OneUser(Id) returns (User);
+    rpc AddUser(User) returns (AddUserStatus);
+    rpc UpdateUser(User) returns (ResponseStatus);
+    rpc DeleteUser(Id) returns (ResponseStatus);
+}
+
+// ORDER
+message Order {
+    int64 id = 1;
+    int64 userid = 2;
+    int64 productid = 3;
+    int64 quantity = 4;
+    int64 totalprice = 5;
+}
+
+message Orders {
+    repeated Order Order = 1;
+}
+
+message Id {
+    int64 id = 1;
+}
+
+message ResponseStatus {
+    string status = 1;
+    optional string error = 2;
+}
+
+message AddOrderStatus {
+    string status = 1;
+    Order Order = 2;
+    optional string error = 3;
+}
+
+service OrderService {
+    rpc AllProdut(Empty) returns (Orders);
+    rpc OneOrder(Id) returns (Order);
+    rpc AddOrder(Order) returns (AddOrderStatus);
+    rpc UpdateOrder(Order) returns (ResponseStatus);
+    rpc DeleteOrder(Id) returns (ResponseStatus);
+}
+
+// PRODUCT
+message Product {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    int64 price = 4;
+}
+
+message Products {
+    repeated Product Product = 1;
+}
+
+message AddProductStatus {
+    string status = 1;
+    Product Product = 2;
+    optional string error = 3;
+}
+
+service ProductService {
+    rpc AllProduct(Empty) returns (Products);
+    rpc OneProduct(Id) returns (Product);
+    rpc AddProduct(Product) returns (AddProductStatus);
+    rpc UpdateProduct(Product) returns (ResponseStatus);
+    rpc DeleteProduct(Id) returns (ResponseStatus);
+}
+
+// SERVICE GATEAWAY
+service Service {}
