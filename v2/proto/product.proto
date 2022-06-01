@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "/product";
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    int64 price = 4;
+}
+
+message Products {
+    repeated Product Product = 1;
+}
+
+message Id {
+    int64 id = 1;
+}
+
+message ResponseStatus {
+    string status = 1;
+    optional string error = 2;
+}
+
+message AddResponseStatus {
+    string status = 1;
+    Product Product = 2;
+    optional string error = 3;
+}
+
+message Empty {}
+
+service AddService {
+    rpc AllProdut(Empty) returns (Products);
+    rpc OneProduct(Id) returns (Product);
+    rpc AddProduct(Product) returns (AddResponseStatus);
+    rpc UpdateProduct(Product) returns (ResponseStatus);
+    rpc DeleteProduct(Id) returns (ResponseStatus);
+}

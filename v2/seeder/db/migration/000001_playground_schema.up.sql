@@ -7,7 +7,7 @@ CREATE TABLE public.product (
 GRANT UPDATE, TRUNCATE, REFERENCES, INSERT, DELETE, TRIGGER, SELECT ON TABLE public.product TO productschema;
 
 CREATE TABLE public.user (
-   id SERIAL primary key,
+   id SERIAL PRIMARY KEY,
    uname VARCHAR,
    email VARCHAR,
    password VARCHAR,
@@ -16,7 +16,7 @@ CREATE TABLE public.user (
 GRANT UPDATE, TRUNCATE, REFERENCES, INSERT, DELETE, TRIGGER, SELECT ON TABLE public.user TO userschema;
 
 CREATE TABLE public.order (
-   id SERIAL primary key,
+   id SERIAL PRIMARY KEY DEFAULT,
    userid integer not null,
    productid integer not null,
    quantity integer not null,
