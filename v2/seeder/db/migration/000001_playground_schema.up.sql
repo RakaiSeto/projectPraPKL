@@ -16,7 +16,7 @@ CREATE TABLE public.user (
 GRANT UPDATE, TRUNCATE, REFERENCES, INSERT, DELETE, TRIGGER, SELECT ON TABLE public.user TO userschema;
 
 CREATE TABLE public.order (
-   id SERIAL PRIMARY KEY DEFAULT,
+   id SERIAL PRIMARY KEY,
    userid integer not null,
    productid integer not null,
    quantity integer not null,

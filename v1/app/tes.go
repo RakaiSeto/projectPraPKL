@@ -16,8 +16,8 @@ type AppuserJSON struct {
 type Error struct {
 	Code int `json:"code"`
 	Message error `json:"message"`
-
 }
+
 type Response struct {
 	Code int `json:"code"`
 	Message string `json:"message"`

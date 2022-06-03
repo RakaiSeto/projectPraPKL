@@ -1,33 +1,82 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"net"
 
+	user "github.com/RakaiSeto/projectPraPKL/v2/server/user"
+	// order "github.com/RakaiSeto/projectPraPKL/v2/server/order"
+	// product "github.com/RakaiSeto/projectPraPKL/v2/server/product"
 	proto "github.com/RakaiSeto/projectPraPKL/v2/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	// product "github.com/RakaiSeto/projectPraPKL/v2/server/product"
 )
 
-type Server struct{}
+type Server struct{
+	proto.ServiceServer
+}
 
 func main() {
 	listener, err := net.Listen("tcp", ":4040")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("1")
-	
+
+	s := Server{}
+
 	srv := grpc.NewServer()
-	fmt.Println("2")
-	proto.RegisterServiceServer(srv, &Server{})
-	fmt.Println("3")
+	proto.RegisterServiceServer(srv, &s)
 	reflection.Register(srv)
-	fmt.Println("4")
 
 	if e := srv.Serve(listener); e != nil {
-			panic(e)
-		} else {
-			fmt.Println("Server listening")
-		}
+		panic(e)
+	}
+
+}
+
+func (s *Server) Tes(ctx context.Context, empty *proto.EmptyStruct) (*proto.ResponseStatus, error) {
+	return &proto.ResponseStatus{Response: "Hello"}, nil
+}
+
+func (s *Server) AllUser(ctx context.Context, empty *proto.EmptyStruct) (*proto.Users, error) {
+	response, err := user.AllUser()
+	if err != nil {
+		return nil, err
+	}
+	var returned proto.Users
+	returned.User = response
+	return &returned, nil 
+}
+
+func (s *Server) OneUser(ctx context.Context, id *proto.Id) (*proto.User, error) {
+	response, err := user.OneUser(int(id.GetId()))
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) AddUser(ctx context.Context, userInput *proto.User) (*proto.AddUserStatus, error) {
+	response, err := user.AddUser(userInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) UpdateUser(ctx context.Context, userInput *proto.User) (*proto.ResponseStatus, error) {
+	response, err := user.UpdateUser(userInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) DeleteUser(ctx context.Context, id *proto.Id) (*proto.ResponseStatus, error) {
+	response, err := user.DeleteUser(int(id.GetId()))
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
 }

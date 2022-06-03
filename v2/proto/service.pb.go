@@ -24,14 +24,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Empty struct {
+type EmptyStruct struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *Empty) Reset() {
-	*x = Empty{}
+func (x *EmptyStruct) Reset() {
+	*x = EmptyStruct{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_service_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -39,13 +39,13 @@ func (x *Empty) Reset() {
 	}
 }
 
-func (x *Empty) String() string {
+func (x *EmptyStruct) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Empty) ProtoMessage() {}
+func (*EmptyStruct) ProtoMessage() {}
 
-func (x *Empty) ProtoReflect() protoreflect.Message {
+func (x *EmptyStruct) ProtoReflect() protoreflect.Message {
 	mi := &file_service_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -57,8 +57,8 @@ func (x *Empty) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
-func (*Empty) Descriptor() ([]byte, []int) {
+// Deprecated: Use EmptyStruct.ProtoReflect.Descriptor instead.
+func (*EmptyStruct) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{0}
 }
 
@@ -194,9 +194,9 @@ type AddUserStatus struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Status string  `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
-	User   *User   `protobuf:"bytes,2,opt,name=User,proto3" json:"User,omitempty"`
-	Error  *string `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	Response string  `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
+	User     *User   `protobuf:"bytes,2,opt,name=User,proto3" json:"User,omitempty"`
+	Error    *string `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 }
 
 func (x *AddUserStatus) Reset() {
@@ -231,9 +231,9 @@ func (*AddUserStatus) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AddUserStatus) GetStatus() string {
+func (x *AddUserStatus) GetResponse() string {
 	if x != nil {
-		return x.Status
+		return x.Response
 	}
 	return ""
 }
@@ -431,8 +431,8 @@ type ResponseStatus struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Status string  `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
-	Error  *string `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	Response string  `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
+	Error    *string `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
 }
 
 func (x *ResponseStatus) Reset() {
@@ -467,9 +467,9 @@ func (*ResponseStatus) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ResponseStatus) GetStatus() string {
+func (x *ResponseStatus) GetResponse() string {
 	if x != nil {
-		return x.Status
+		return x.Response
 	}
 	return ""
 }
@@ -486,9 +486,9 @@ type AddOrderStatus struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Status string  `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
-	Order  *Order  `protobuf:"bytes,2,opt,name=Order,proto3" json:"Order,omitempty"`
-	Error  *string `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	Response string  `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
+	Order    *Order  `protobuf:"bytes,2,opt,name=Order,proto3" json:"Order,omitempty"`
+	Error    *string `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 }
 
 func (x *AddOrderStatus) Reset() {
@@ -523,9 +523,9 @@ func (*AddOrderStatus) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *AddOrderStatus) GetStatus() string {
+func (x *AddOrderStatus) GetResponse() string {
 	if x != nil {
-		return x.Status
+		return x.Response
 	}
 	return ""
 }
@@ -668,9 +668,9 @@ type AddProductStatus struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Status  string   `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
-	Product *Product `protobuf:"bytes,2,opt,name=Product,proto3" json:"Product,omitempty"`
-	Error   *string  `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	Response string   `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
+	Product  *Product `protobuf:"bytes,2,opt,name=Product,proto3" json:"Product,omitempty"`
+	Error    *string  `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 }
 
 func (x *AddProductStatus) Reset() {
@@ -705,9 +705,9 @@ func (*AddProductStatus) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *AddProductStatus) GetStatus() string {
+func (x *AddProductStatus) GetResponse() string {
 	if x != nil {
-		return x.Status
+		return x.Response
 	}
 	return ""
 }
@@ -730,85 +730,86 @@ var File_service_proto protoreflect.FileDescriptor
 
 var file_service_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x22, 0x07, 0x0a, 0x05, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22,
-	0x84, 0x01, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x75, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x75, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14,
-	0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65,
-	0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1f, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f,
-	0x72, 0x64, 0x88, 0x01, 0x01, 0x12, 0x12, 0x0a, 0x04, 0x72, 0x6f, 0x6c, 0x65, 0x18, 0x05, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x04, 0x72, 0x6f, 0x6c, 0x65, 0x42, 0x0b, 0x0a, 0x09, 0x5f, 0x70, 0x61,
-	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x28, 0x0a, 0x05, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12,
-	0x1f, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0b, 0x2e,
-	0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x04, 0x55, 0x73, 0x65, 0x72,
-	0x22, 0x6d, 0x0a, 0x0d, 0x41, 0x64, 0x64, 0x55, 0x73, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1f, 0x0a, 0x04, 0x55, 0x73, 0x65,
-	0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
-	0x55, 0x73, 0x65, 0x72, 0x52, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x72,
-	0x72, 0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65, 0x72, 0x72,
-	0x6f, 0x72, 0x88, 0x01, 0x01, 0x42, 0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x22,
-	0x89, 0x01, 0x0a, 0x05, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65,
-	0x72, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x69,
-	0x64, 0x12, 0x1c, 0x0a, 0x09, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x69, 0x64, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x69, 0x64, 0x12,
-	0x1a, 0x0a, 0x08, 0x71, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x03, 0x52, 0x08, 0x71, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x1e, 0x0a, 0x0a, 0x74,
-	0x6f, 0x74, 0x61, 0x6c, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52,
-	0x0a, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x70, 0x72, 0x69, 0x63, 0x65, 0x22, 0x2c, 0x0a, 0x06, 0x4f,
-	0x72, 0x64, 0x65, 0x72, 0x73, 0x12, 0x22, 0x0a, 0x05, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x18, 0x01,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x4f, 0x72, 0x64,
-	0x65, 0x72, 0x52, 0x05, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x22, 0x14, 0x0a, 0x02, 0x49, 0x64, 0x12,
-	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x22,
-	0x4d, 0x0a, 0x0e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x72, 0x72,
-	0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f,
-	0x72, 0x88, 0x01, 0x01, 0x42, 0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x22, 0x71,
-	0x0a, 0x0e, 0x41, 0x64, 0x64, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x22, 0x0a, 0x05, 0x4f, 0x72, 0x64, 0x65,
-	0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
-	0x4f, 0x72, 0x64, 0x65, 0x72, 0x52, 0x05, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x05,
-	0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65,
-	0x72, 0x72, 0x6f, 0x72, 0x88, 0x01, 0x01, 0x42, 0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f,
-	0x72, 0x22, 0x65, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x0e, 0x0a, 0x02,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04,
-	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x03, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x22, 0x34, 0x0a, 0x08, 0x50, 0x72, 0x6f, 0x64,
-	0x75, 0x63, 0x74, 0x73, 0x12, 0x28, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x50, 0x72,
-	0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x22, 0x79,
-	0x0a, 0x10, 0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x53, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x28, 0x0a, 0x07, 0x50, 0x72,
-	0x6f, 0x64, 0x75, 0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x6f, 0x72,
-	0x64, 0x65, 0x72, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x07, 0x50, 0x72, 0x6f,
-	0x64, 0x75, 0x63, 0x74, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x03, 0x20,
+	0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x22, 0x0d, 0x0a, 0x0b, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x53,
+	0x74, 0x72, 0x75, 0x63, 0x74, 0x22, 0x84, 0x01, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x14,
+	0x0a, 0x05, 0x75, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x75,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1f, 0x0a, 0x08, 0x70, 0x61,
+	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x08,
+	0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x88, 0x01, 0x01, 0x12, 0x12, 0x0a, 0x04, 0x72,
+	0x6f, 0x6c, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x72, 0x6f, 0x6c, 0x65, 0x42,
+	0x0b, 0x0a, 0x09, 0x5f, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x28, 0x0a, 0x05,
+	0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x1f, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x04, 0x55, 0x73, 0x65, 0x72, 0x22, 0x71, 0x0a, 0x0d, 0x41, 0x64, 0x64, 0x55, 0x73, 0x65,
+	0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x0b, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x04,
+	0x55, 0x73, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x03, 0x20,
 	0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x88, 0x01, 0x01, 0x42,
-	0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x32, 0xe3, 0x01, 0x0a, 0x07, 0x41, 0x64,
-	0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x25, 0x0a, 0x07, 0x41, 0x6c, 0x6c, 0x55, 0x73, 0x65, 0x72,
-	0x12, 0x0c, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x0c,
-	0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x21, 0x0a, 0x07,
-	0x4f, 0x6e, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
-	0x49, 0x64, 0x1a, 0x0b, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x12,
-	0x2c, 0x0a, 0x07, 0x41, 0x64, 0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x0b, 0x2e, 0x6f, 0x72, 0x64,
-	0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x1a, 0x14, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
-	0x41, 0x64, 0x64, 0x55, 0x73, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x30, 0x0a,
-	0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x0b, 0x2e, 0x6f, 0x72,
-	0x64, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x1a, 0x15, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72,
-	0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12,
-	0x2e, 0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x09, 0x2e,
-	0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49, 0x64, 0x1a, 0x15, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72,
-	0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x32,
-	0xf3, 0x01, 0x0a, 0x0c, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x12, 0x28, 0x0a, 0x09, 0x41, 0x6c, 0x6c, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x74, 0x12, 0x0c, 0x2e,
-	0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x0d, 0x2e, 0x6f, 0x72,
+	0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x22, 0x89, 0x01, 0x0a, 0x05, 0x4f, 0x72,
+	0x64, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x69, 0x64, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x69, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x70,
+	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09,
+	0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x69, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x71, 0x75, 0x61,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x71, 0x75, 0x61,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x1e, 0x0a, 0x0a, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x70, 0x72,
+	0x69, 0x63, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x74, 0x6f, 0x74, 0x61, 0x6c,
+	0x70, 0x72, 0x69, 0x63, 0x65, 0x22, 0x2c, 0x0a, 0x06, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x73, 0x12,
+	0x22, 0x0a, 0x05, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0c,
+	0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x52, 0x05, 0x4f, 0x72,
+	0x64, 0x65, 0x72, 0x22, 0x14, 0x0a, 0x02, 0x49, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x22, 0x51, 0x0a, 0x0e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x72,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x88,
+	0x01, 0x01, 0x42, 0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x22, 0x75, 0x0a, 0x0e,
+	0x41, 0x64, 0x64, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1a,
+	0x0a, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x22, 0x0a, 0x05, 0x4f, 0x72,
+	0x64, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x6f, 0x72, 0x64, 0x65,
+	0x72, 0x2e, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x52, 0x05, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x19,
+	0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52,
+	0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x88, 0x01, 0x01, 0x42, 0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72,
+	0x72, 0x6f, 0x72, 0x22, 0x65, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x03, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x22, 0x34, 0x0a, 0x08, 0x50, 0x72,
+	0x6f, 0x64, 0x75, 0x63, 0x74, 0x73, 0x12, 0x28, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
+	0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
+	0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74,
+	0x22, 0x7d, 0x0a, 0x10, 0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x28, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x0e, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
+	0x74, 0x52, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x72,
+	0x72, 0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65, 0x72, 0x72,
+	0x6f, 0x72, 0x88, 0x01, 0x01, 0x42, 0x08, 0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x32,
+	0x83, 0x06, 0x0a, 0x07, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2b, 0x0a, 0x07, 0x41,
+	0x6c, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x12, 0x12, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x45,
+	0x6d, 0x70, 0x74, 0x79, 0x53, 0x74, 0x72, 0x75, 0x63, 0x74, 0x1a, 0x0c, 0x2e, 0x6f, 0x72, 0x64,
+	0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x21, 0x0a, 0x07, 0x4f, 0x6e, 0x65, 0x55,
+	0x73, 0x65, 0x72, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49, 0x64, 0x1a, 0x0b,
+	0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x12, 0x2c, 0x0a, 0x07, 0x41,
+	0x64, 0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x0b, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x55,
+	0x73, 0x65, 0x72, 0x1a, 0x14, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x41, 0x64, 0x64, 0x55,
+	0x73, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x30, 0x0a, 0x0a, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x0b, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
+	0x55, 0x73, 0x65, 0x72, 0x1a, 0x15, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2e, 0x0a, 0x0a, 0x44,
+	0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65,
+	0x72, 0x2e, 0x49, 0x64, 0x1a, 0x15, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2d, 0x0a, 0x08, 0x41,
+	0x6c, 0x6c, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x12, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
+	0x45, 0x6d, 0x70, 0x74, 0x79, 0x53, 0x74, 0x72, 0x75, 0x63, 0x74, 0x1a, 0x0d, 0x2e, 0x6f, 0x72,
 	0x64, 0x65, 0x72, 0x2e, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x73, 0x12, 0x23, 0x0a, 0x08, 0x4f, 0x6e,
 	0x65, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49,
 	0x64, 0x1a, 0x0c, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x12,
@@ -821,25 +822,27 @@ var file_service_proto_rawDesc = []byte{
 	0x61, 0x74, 0x75, 0x73, 0x12, 0x2f, 0x0a, 0x0b, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4f, 0x72,
 	0x64, 0x65, 0x72, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49, 0x64, 0x1a, 0x15,
 	0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x32, 0x88, 0x02, 0x0a, 0x0e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
-	0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2b, 0x0a, 0x0a, 0x41, 0x6c, 0x6c, 0x50,
-	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x0c, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x45,
-	0x6d, 0x70, 0x74, 0x79, 0x1a, 0x0f, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x50, 0x72, 0x6f,
-	0x64, 0x75, 0x63, 0x74, 0x73, 0x12, 0x27, 0x0a, 0x0a, 0x4f, 0x6e, 0x65, 0x50, 0x72, 0x6f, 0x64,
-	0x75, 0x63, 0x74, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49, 0x64, 0x1a, 0x0e,
-	0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x35,
-	0x0a, 0x0a, 0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x0e, 0x2e, 0x6f,
-	0x72, 0x64, 0x65, 0x72, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x1a, 0x17, 0x2e, 0x6f,
-	0x72, 0x64, 0x65, 0x72, 0x2e, 0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x53,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x36, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x0e, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x50,
-	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x1a, 0x15, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x31, 0x0a,
-	0x0d, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x09,
-	0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49, 0x64, 0x1a, 0x15, 0x2e, 0x6f, 0x72, 0x64, 0x65,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x31, 0x0a, 0x0a, 0x41, 0x6c, 0x6c, 0x50, 0x72, 0x6f, 0x64,
+	0x75, 0x63, 0x74, 0x12, 0x12, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x53, 0x74, 0x72, 0x75, 0x63, 0x74, 0x1a, 0x0f, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e,
+	0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x73, 0x12, 0x27, 0x0a, 0x0a, 0x4f, 0x6e, 0x65, 0x50,
+	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49,
+	0x64, 0x1a, 0x0e, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
+	0x74, 0x12, 0x35, 0x0a, 0x0a, 0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12,
+	0x0e, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x1a,
+	0x17, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75,
+	0x63, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x36, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x12, 0x0e, 0x2e, 0x6f, 0x72, 0x64, 0x65,
+	0x72, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x1a, 0x15, 0x2e, 0x6f, 0x72, 0x64, 0x65,
 	0x72, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x32, 0x09, 0x0a, 0x07, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x42, 0x0a, 0x5a, 0x08, 0x2f,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x12, 0x31, 0x0a, 0x0d, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
+	0x74, 0x12, 0x09, 0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x49, 0x64, 0x1a, 0x15, 0x2e, 0x6f,
+	0x72, 0x64, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x12, 0x30, 0x0a, 0x03, 0x54, 0x65, 0x73, 0x12, 0x12, 0x2e, 0x6f, 0x72, 0x64,
+	0x65, 0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x53, 0x74, 0x72, 0x75, 0x63, 0x74, 0x1a, 0x15,
+	0x2e, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x42, 0x0a, 0x5a, 0x08, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -856,7 +859,7 @@ func file_service_proto_rawDescGZIP() []byte {
 
 var file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_service_proto_goTypes = []interface{}{
-	(*Empty)(nil),            // 0: order.Empty
+	(*EmptyStruct)(nil),      // 0: order.EmptyStruct
 	(*User)(nil),             // 1: order.User
 	(*Users)(nil),            // 2: order.Users
 	(*AddUserStatus)(nil),    // 3: order.AddUserStatus
@@ -876,38 +879,40 @@ var file_service_proto_depIdxs = []int32{
 	4,  // 3: order.AddOrderStatus.Order:type_name -> order.Order
 	9,  // 4: order.Products.Product:type_name -> order.Product
 	9,  // 5: order.AddProductStatus.Product:type_name -> order.Product
-	0,  // 6: order.AddUser.AllUser:input_type -> order.Empty
-	6,  // 7: order.AddUser.OneUser:input_type -> order.Id
-	1,  // 8: order.AddUser.AddUser:input_type -> order.User
-	1,  // 9: order.AddUser.UpdateUser:input_type -> order.User
-	6,  // 10: order.AddUser.DeleteUser:input_type -> order.Id
-	0,  // 11: order.OrderService.AllProdut:input_type -> order.Empty
-	6,  // 12: order.OrderService.OneOrder:input_type -> order.Id
-	4,  // 13: order.OrderService.AddOrder:input_type -> order.Order
-	4,  // 14: order.OrderService.UpdateOrder:input_type -> order.Order
-	6,  // 15: order.OrderService.DeleteOrder:input_type -> order.Id
-	0,  // 16: order.ProductService.AllProduct:input_type -> order.Empty
-	6,  // 17: order.ProductService.OneProduct:input_type -> order.Id
-	9,  // 18: order.ProductService.AddProduct:input_type -> order.Product
-	9,  // 19: order.ProductService.UpdateProduct:input_type -> order.Product
-	6,  // 20: order.ProductService.DeleteProduct:input_type -> order.Id
-	2,  // 21: order.AddUser.AllUser:output_type -> order.Users
-	1,  // 22: order.AddUser.OneUser:output_type -> order.User
-	3,  // 23: order.AddUser.AddUser:output_type -> order.AddUserStatus
-	7,  // 24: order.AddUser.UpdateUser:output_type -> order.ResponseStatus
-	7,  // 25: order.AddUser.DeleteUser:output_type -> order.ResponseStatus
-	5,  // 26: order.OrderService.AllProdut:output_type -> order.Orders
-	4,  // 27: order.OrderService.OneOrder:output_type -> order.Order
-	8,  // 28: order.OrderService.AddOrder:output_type -> order.AddOrderStatus
-	7,  // 29: order.OrderService.UpdateOrder:output_type -> order.ResponseStatus
-	7,  // 30: order.OrderService.DeleteOrder:output_type -> order.ResponseStatus
-	10, // 31: order.ProductService.AllProduct:output_type -> order.Products
-	9,  // 32: order.ProductService.OneProduct:output_type -> order.Product
-	11, // 33: order.ProductService.AddProduct:output_type -> order.AddProductStatus
-	7,  // 34: order.ProductService.UpdateProduct:output_type -> order.ResponseStatus
-	7,  // 35: order.ProductService.DeleteProduct:output_type -> order.ResponseStatus
-	21, // [21:36] is the sub-list for method output_type
-	6,  // [6:21] is the sub-list for method input_type
+	0,  // 6: order.Service.AllUser:input_type -> order.EmptyStruct
+	6,  // 7: order.Service.OneUser:input_type -> order.Id
+	1,  // 8: order.Service.AddUser:input_type -> order.User
+	1,  // 9: order.Service.UpdateUser:input_type -> order.User
+	6,  // 10: order.Service.DeleteUser:input_type -> order.Id
+	0,  // 11: order.Service.AllOrder:input_type -> order.EmptyStruct
+	6,  // 12: order.Service.OneOrder:input_type -> order.Id
+	4,  // 13: order.Service.AddOrder:input_type -> order.Order
+	4,  // 14: order.Service.UpdateOrder:input_type -> order.Order
+	6,  // 15: order.Service.DeleteOrder:input_type -> order.Id
+	0,  // 16: order.Service.AllProduct:input_type -> order.EmptyStruct
+	6,  // 17: order.Service.OneProduct:input_type -> order.Id
+	9,  // 18: order.Service.AddProduct:input_type -> order.Product
+	9,  // 19: order.Service.UpdateProduct:input_type -> order.Product
+	6,  // 20: order.Service.DeleteProduct:input_type -> order.Id
+	0,  // 21: order.Service.Tes:input_type -> order.EmptyStruct
+	2,  // 22: order.Service.AllUser:output_type -> order.Users
+	1,  // 23: order.Service.OneUser:output_type -> order.User
+	3,  // 24: order.Service.AddUser:output_type -> order.AddUserStatus
+	7,  // 25: order.Service.UpdateUser:output_type -> order.ResponseStatus
+	7,  // 26: order.Service.DeleteUser:output_type -> order.ResponseStatus
+	5,  // 27: order.Service.AllOrder:output_type -> order.Orders
+	4,  // 28: order.Service.OneOrder:output_type -> order.Order
+	8,  // 29: order.Service.AddOrder:output_type -> order.AddOrderStatus
+	7,  // 30: order.Service.UpdateOrder:output_type -> order.ResponseStatus
+	7,  // 31: order.Service.DeleteOrder:output_type -> order.ResponseStatus
+	10, // 32: order.Service.AllProduct:output_type -> order.Products
+	9,  // 33: order.Service.OneProduct:output_type -> order.Product
+	11, // 34: order.Service.AddProduct:output_type -> order.AddProductStatus
+	7,  // 35: order.Service.UpdateProduct:output_type -> order.ResponseStatus
+	7,  // 36: order.Service.DeleteProduct:output_type -> order.ResponseStatus
+	7,  // 37: order.Service.Tes:output_type -> order.ResponseStatus
+	22, // [22:38] is the sub-list for method output_type
+	6,  // [6:22] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
 	6,  // [6:6] is the sub-list for extension extendee
 	0,  // [0:6] is the sub-list for field type_name
@@ -920,7 +925,7 @@ func file_service_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_service_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Empty); i {
+			switch v := v.(*EmptyStruct); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1077,7 +1082,7 @@ func file_service_proto_init() {
 			NumEnums:      0,
 			NumMessages:   12,
 			NumExtensions: 0,
-			NumServices:   4,
+			NumServices:   1,
 		},
 		GoTypes:           file_service_proto_goTypes,
 		DependencyIndexes: file_service_proto_depIdxs,
@@ -1097,658 +1102,26 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// AddUserClient is the client API for AddUser service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type AddUserClient interface {
-	AllUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Users, error)
-	OneUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error)
-	AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserStatus, error)
-	UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseStatus, error)
-	DeleteUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error)
-}
-
-type addUserClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewAddUserClient(cc grpc.ClientConnInterface) AddUserClient {
-	return &addUserClient{cc}
-}
-
-func (c *addUserClient) AllUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Users, error) {
-	out := new(Users)
-	err := c.cc.Invoke(ctx, "/order.AddUser/AllUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *addUserClient) OneUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
-	err := c.cc.Invoke(ctx, "/order.AddUser/OneUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *addUserClient) AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserStatus, error) {
-	out := new(AddUserStatus)
-	err := c.cc.Invoke(ctx, "/order.AddUser/AddUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *addUserClient) UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseStatus, error) {
-	out := new(ResponseStatus)
-	err := c.cc.Invoke(ctx, "/order.AddUser/UpdateUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *addUserClient) DeleteUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error) {
-	out := new(ResponseStatus)
-	err := c.cc.Invoke(ctx, "/order.AddUser/DeleteUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// AddUserServer is the server API for AddUser service.
-type AddUserServer interface {
-	AllUser(context.Context, *Empty) (*Users, error)
-	OneUser(context.Context, *Id) (*User, error)
-	AddUser(context.Context, *User) (*AddUserStatus, error)
-	UpdateUser(context.Context, *User) (*ResponseStatus, error)
-	DeleteUser(context.Context, *Id) (*ResponseStatus, error)
-}
-
-// UnimplementedAddUserServer can be embedded to have forward compatible implementations.
-type UnimplementedAddUserServer struct {
-}
-
-func (*UnimplementedAddUserServer) AllUser(context.Context, *Empty) (*Users, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AllUser not implemented")
-}
-func (*UnimplementedAddUserServer) OneUser(context.Context, *Id) (*User, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method OneUser not implemented")
-}
-func (*UnimplementedAddUserServer) AddUser(context.Context, *User) (*AddUserStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
-}
-func (*UnimplementedAddUserServer) UpdateUser(context.Context, *User) (*ResponseStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
-}
-func (*UnimplementedAddUserServer) DeleteUser(context.Context, *Id) (*ResponseStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
-}
-
-func RegisterAddUserServer(s *grpc.Server, srv AddUserServer) {
-	s.RegisterService(&_AddUser_serviceDesc, srv)
-}
-
-func _AddUser_AllUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AddUserServer).AllUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.AddUser/AllUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddUserServer).AllUser(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AddUser_OneUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AddUserServer).OneUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.AddUser/OneUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddUserServer).OneUser(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AddUser_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AddUserServer).AddUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.AddUser/AddUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddUserServer).AddUser(ctx, req.(*User))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AddUser_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AddUserServer).UpdateUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.AddUser/UpdateUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddUserServer).UpdateUser(ctx, req.(*User))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AddUser_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AddUserServer).DeleteUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.AddUser/DeleteUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddUserServer).DeleteUser(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _AddUser_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "order.AddUser",
-	HandlerType: (*AddUserServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "AllUser",
-			Handler:    _AddUser_AllUser_Handler,
-		},
-		{
-			MethodName: "OneUser",
-			Handler:    _AddUser_OneUser_Handler,
-		},
-		{
-			MethodName: "AddUser",
-			Handler:    _AddUser_AddUser_Handler,
-		},
-		{
-			MethodName: "UpdateUser",
-			Handler:    _AddUser_UpdateUser_Handler,
-		},
-		{
-			MethodName: "DeleteUser",
-			Handler:    _AddUser_DeleteUser_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
-}
-
-// OrderServiceClient is the client API for OrderService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type OrderServiceClient interface {
-	AllProdut(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Orders, error)
-	OneOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Order, error)
-	AddOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*AddOrderStatus, error)
-	UpdateOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*ResponseStatus, error)
-	DeleteOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error)
-}
-
-type orderServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewOrderServiceClient(cc grpc.ClientConnInterface) OrderServiceClient {
-	return &orderServiceClient{cc}
-}
-
-func (c *orderServiceClient) AllProdut(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Orders, error) {
-	out := new(Orders)
-	err := c.cc.Invoke(ctx, "/order.OrderService/AllProdut", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *orderServiceClient) OneOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Order, error) {
-	out := new(Order)
-	err := c.cc.Invoke(ctx, "/order.OrderService/OneOrder", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *orderServiceClient) AddOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*AddOrderStatus, error) {
-	out := new(AddOrderStatus)
-	err := c.cc.Invoke(ctx, "/order.OrderService/AddOrder", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *orderServiceClient) UpdateOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*ResponseStatus, error) {
-	out := new(ResponseStatus)
-	err := c.cc.Invoke(ctx, "/order.OrderService/UpdateOrder", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *orderServiceClient) DeleteOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error) {
-	out := new(ResponseStatus)
-	err := c.cc.Invoke(ctx, "/order.OrderService/DeleteOrder", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// OrderServiceServer is the server API for OrderService service.
-type OrderServiceServer interface {
-	AllProdut(context.Context, *Empty) (*Orders, error)
-	OneOrder(context.Context, *Id) (*Order, error)
-	AddOrder(context.Context, *Order) (*AddOrderStatus, error)
-	UpdateOrder(context.Context, *Order) (*ResponseStatus, error)
-	DeleteOrder(context.Context, *Id) (*ResponseStatus, error)
-}
-
-// UnimplementedOrderServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedOrderServiceServer struct {
-}
-
-func (*UnimplementedOrderServiceServer) AllProdut(context.Context, *Empty) (*Orders, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AllProdut not implemented")
-}
-func (*UnimplementedOrderServiceServer) OneOrder(context.Context, *Id) (*Order, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method OneOrder not implemented")
-}
-func (*UnimplementedOrderServiceServer) AddOrder(context.Context, *Order) (*AddOrderStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddOrder not implemented")
-}
-func (*UnimplementedOrderServiceServer) UpdateOrder(context.Context, *Order) (*ResponseStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateOrder not implemented")
-}
-func (*UnimplementedOrderServiceServer) DeleteOrder(context.Context, *Id) (*ResponseStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteOrder not implemented")
-}
-
-func RegisterOrderServiceServer(s *grpc.Server, srv OrderServiceServer) {
-	s.RegisterService(&_OrderService_serviceDesc, srv)
-}
-
-func _OrderService_AllProdut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrderServiceServer).AllProdut(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.OrderService/AllProdut",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).AllProdut(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _OrderService_OneOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrderServiceServer).OneOrder(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.OrderService/OneOrder",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).OneOrder(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _OrderService_AddOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Order)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrderServiceServer).AddOrder(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.OrderService/AddOrder",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).AddOrder(ctx, req.(*Order))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _OrderService_UpdateOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Order)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrderServiceServer).UpdateOrder(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.OrderService/UpdateOrder",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).UpdateOrder(ctx, req.(*Order))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _OrderService_DeleteOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrderServiceServer).DeleteOrder(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.OrderService/DeleteOrder",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).DeleteOrder(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _OrderService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "order.OrderService",
-	HandlerType: (*OrderServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "AllProdut",
-			Handler:    _OrderService_AllProdut_Handler,
-		},
-		{
-			MethodName: "OneOrder",
-			Handler:    _OrderService_OneOrder_Handler,
-		},
-		{
-			MethodName: "AddOrder",
-			Handler:    _OrderService_AddOrder_Handler,
-		},
-		{
-			MethodName: "UpdateOrder",
-			Handler:    _OrderService_UpdateOrder_Handler,
-		},
-		{
-			MethodName: "DeleteOrder",
-			Handler:    _OrderService_DeleteOrder_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
-}
-
-// ProductServiceClient is the client API for ProductService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ProductServiceClient interface {
-	AllProduct(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Products, error)
-	OneProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Product, error)
-	AddProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*AddProductStatus, error)
-	UpdateProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ResponseStatus, error)
-	DeleteProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error)
-}
-
-type productServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewProductServiceClient(cc grpc.ClientConnInterface) ProductServiceClient {
-	return &productServiceClient{cc}
-}
-
-func (c *productServiceClient) AllProduct(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Products, error) {
-	out := new(Products)
-	err := c.cc.Invoke(ctx, "/order.ProductService/AllProduct", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productServiceClient) OneProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Product, error) {
-	out := new(Product)
-	err := c.cc.Invoke(ctx, "/order.ProductService/OneProduct", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productServiceClient) AddProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*AddProductStatus, error) {
-	out := new(AddProductStatus)
-	err := c.cc.Invoke(ctx, "/order.ProductService/AddProduct", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productServiceClient) UpdateProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ResponseStatus, error) {
-	out := new(ResponseStatus)
-	err := c.cc.Invoke(ctx, "/order.ProductService/UpdateProduct", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productServiceClient) DeleteProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error) {
-	out := new(ResponseStatus)
-	err := c.cc.Invoke(ctx, "/order.ProductService/DeleteProduct", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ProductServiceServer is the server API for ProductService service.
-type ProductServiceServer interface {
-	AllProduct(context.Context, *Empty) (*Products, error)
-	OneProduct(context.Context, *Id) (*Product, error)
-	AddProduct(context.Context, *Product) (*AddProductStatus, error)
-	UpdateProduct(context.Context, *Product) (*ResponseStatus, error)
-	DeleteProduct(context.Context, *Id) (*ResponseStatus, error)
-}
-
-// UnimplementedProductServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedProductServiceServer struct {
-}
-
-func (*UnimplementedProductServiceServer) AllProduct(context.Context, *Empty) (*Products, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AllProduct not implemented")
-}
-func (*UnimplementedProductServiceServer) OneProduct(context.Context, *Id) (*Product, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method OneProduct not implemented")
-}
-func (*UnimplementedProductServiceServer) AddProduct(context.Context, *Product) (*AddProductStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddProduct not implemented")
-}
-func (*UnimplementedProductServiceServer) UpdateProduct(context.Context, *Product) (*ResponseStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateProduct not implemented")
-}
-func (*UnimplementedProductServiceServer) DeleteProduct(context.Context, *Id) (*ResponseStatus, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteProduct not implemented")
-}
-
-func RegisterProductServiceServer(s *grpc.Server, srv ProductServiceServer) {
-	s.RegisterService(&_ProductService_serviceDesc, srv)
-}
-
-func _ProductService_AllProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductServiceServer).AllProduct(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.ProductService/AllProduct",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).AllProduct(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductService_OneProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductServiceServer).OneProduct(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.ProductService/OneProduct",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).OneProduct(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductService_AddProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Product)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductServiceServer).AddProduct(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.ProductService/AddProduct",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).AddProduct(ctx, req.(*Product))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductService_UpdateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Product)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductServiceServer).UpdateProduct(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.ProductService/UpdateProduct",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).UpdateProduct(ctx, req.(*Product))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductService_DeleteProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductServiceServer).DeleteProduct(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/order.ProductService/DeleteProduct",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).DeleteProduct(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _ProductService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "order.ProductService",
-	HandlerType: (*ProductServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "AllProduct",
-			Handler:    _ProductService_AllProduct_Handler,
-		},
-		{
-			MethodName: "OneProduct",
-			Handler:    _ProductService_OneProduct_Handler,
-		},
-		{
-			MethodName: "AddProduct",
-			Handler:    _ProductService_AddProduct_Handler,
-		},
-		{
-			MethodName: "UpdateProduct",
-			Handler:    _ProductService_UpdateProduct_Handler,
-		},
-		{
-			MethodName: "DeleteProduct",
-			Handler:    _ProductService_DeleteProduct_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
-}
-
 // ServiceClient is the client API for Service service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ServiceClient interface {
+	AllUser(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*Users, error)
+	OneUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error)
+	AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserStatus, error)
+	UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseStatus, error)
+	DeleteUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error)
+	AllOrder(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*Orders, error)
+	OneOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Order, error)
+	AddOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*AddOrderStatus, error)
+	UpdateOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*ResponseStatus, error)
+	DeleteOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error)
+	AllProduct(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*Products, error)
+	OneProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Product, error)
+	AddProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*AddProductStatus, error)
+	UpdateProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ResponseStatus, error)
+	DeleteProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error)
+	Tes(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*ResponseStatus, error)
 }
 
 type serviceClient struct {
@@ -1759,22 +1132,584 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
+func (c *serviceClient) AllUser(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*Users, error) {
+	out := new(Users)
+	err := c.cc.Invoke(ctx, "/order.Service/AllUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) OneUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error) {
+	out := new(User)
+	err := c.cc.Invoke(ctx, "/order.Service/OneUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserStatus, error) {
+	out := new(AddUserStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/AddUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseStatus, error) {
+	out := new(ResponseStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/UpdateUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) DeleteUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error) {
+	out := new(ResponseStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/DeleteUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) AllOrder(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*Orders, error) {
+	out := new(Orders)
+	err := c.cc.Invoke(ctx, "/order.Service/AllOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) OneOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Order, error) {
+	out := new(Order)
+	err := c.cc.Invoke(ctx, "/order.Service/OneOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) AddOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*AddOrderStatus, error) {
+	out := new(AddOrderStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/AddOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) UpdateOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*ResponseStatus, error) {
+	out := new(ResponseStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/UpdateOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) DeleteOrder(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error) {
+	out := new(ResponseStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/DeleteOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) AllProduct(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*Products, error) {
+	out := new(Products)
+	err := c.cc.Invoke(ctx, "/order.Service/AllProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) OneProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Product, error) {
+	out := new(Product)
+	err := c.cc.Invoke(ctx, "/order.Service/OneProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) AddProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*AddProductStatus, error) {
+	out := new(AddProductStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/AddProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) UpdateProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ResponseStatus, error) {
+	out := new(ResponseStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/UpdateProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) DeleteProduct(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ResponseStatus, error) {
+	out := new(ResponseStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/DeleteProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) Tes(ctx context.Context, in *EmptyStruct, opts ...grpc.CallOption) (*ResponseStatus, error) {
+	out := new(ResponseStatus)
+	err := c.cc.Invoke(ctx, "/order.Service/Tes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServiceServer is the server API for Service service.
 type ServiceServer interface {
+	AllUser(context.Context, *EmptyStruct) (*Users, error)
+	OneUser(context.Context, *Id) (*User, error)
+	AddUser(context.Context, *User) (*AddUserStatus, error)
+	UpdateUser(context.Context, *User) (*ResponseStatus, error)
+	DeleteUser(context.Context, *Id) (*ResponseStatus, error)
+	AllOrder(context.Context, *EmptyStruct) (*Orders, error)
+	OneOrder(context.Context, *Id) (*Order, error)
+	AddOrder(context.Context, *Order) (*AddOrderStatus, error)
+	UpdateOrder(context.Context, *Order) (*ResponseStatus, error)
+	DeleteOrder(context.Context, *Id) (*ResponseStatus, error)
+	AllProduct(context.Context, *EmptyStruct) (*Products, error)
+	OneProduct(context.Context, *Id) (*Product, error)
+	AddProduct(context.Context, *Product) (*AddProductStatus, error)
+	UpdateProduct(context.Context, *Product) (*ResponseStatus, error)
+	DeleteProduct(context.Context, *Id) (*ResponseStatus, error)
+	Tes(context.Context, *EmptyStruct) (*ResponseStatus, error)
 }
 
 // UnimplementedServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedServiceServer struct {
 }
 
+func (*UnimplementedServiceServer) AllUser(context.Context, *EmptyStruct) (*Users, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AllUser not implemented")
+}
+func (*UnimplementedServiceServer) OneUser(context.Context, *Id) (*User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OneUser not implemented")
+}
+func (*UnimplementedServiceServer) AddUser(context.Context, *User) (*AddUserStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
+}
+func (*UnimplementedServiceServer) UpdateUser(context.Context, *User) (*ResponseStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
+}
+func (*UnimplementedServiceServer) DeleteUser(context.Context, *Id) (*ResponseStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
+}
+func (*UnimplementedServiceServer) AllOrder(context.Context, *EmptyStruct) (*Orders, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AllOrder not implemented")
+}
+func (*UnimplementedServiceServer) OneOrder(context.Context, *Id) (*Order, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OneOrder not implemented")
+}
+func (*UnimplementedServiceServer) AddOrder(context.Context, *Order) (*AddOrderStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddOrder not implemented")
+}
+func (*UnimplementedServiceServer) UpdateOrder(context.Context, *Order) (*ResponseStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateOrder not implemented")
+}
+func (*UnimplementedServiceServer) DeleteOrder(context.Context, *Id) (*ResponseStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteOrder not implemented")
+}
+func (*UnimplementedServiceServer) AllProduct(context.Context, *EmptyStruct) (*Products, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AllProduct not implemented")
+}
+func (*UnimplementedServiceServer) OneProduct(context.Context, *Id) (*Product, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OneProduct not implemented")
+}
+func (*UnimplementedServiceServer) AddProduct(context.Context, *Product) (*AddProductStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddProduct not implemented")
+}
+func (*UnimplementedServiceServer) UpdateProduct(context.Context, *Product) (*ResponseStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProduct not implemented")
+}
+func (*UnimplementedServiceServer) DeleteProduct(context.Context, *Id) (*ResponseStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProduct not implemented")
+}
+func (*UnimplementedServiceServer) Tes(context.Context, *EmptyStruct) (*ResponseStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Tes not implemented")
+}
+
 func RegisterServiceServer(s *grpc.Server, srv ServiceServer) {
 	s.RegisterService(&_Service_serviceDesc, srv)
+}
+
+func _Service_AllUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyStruct)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).AllUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/AllUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).AllUser(ctx, req.(*EmptyStruct))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_OneUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).OneUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/OneUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).OneUser(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).AddUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/AddUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).AddUser(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).UpdateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/UpdateUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).UpdateUser(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).DeleteUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/DeleteUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).DeleteUser(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_AllOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyStruct)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).AllOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/AllOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).AllOrder(ctx, req.(*EmptyStruct))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_OneOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).OneOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/OneOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).OneOrder(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_AddOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Order)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).AddOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/AddOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).AddOrder(ctx, req.(*Order))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_UpdateOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Order)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).UpdateOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/UpdateOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).UpdateOrder(ctx, req.(*Order))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_DeleteOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).DeleteOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/DeleteOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).DeleteOrder(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_AllProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyStruct)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).AllProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/AllProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).AllProduct(ctx, req.(*EmptyStruct))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_OneProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).OneProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/OneProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).OneProduct(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_AddProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Product)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).AddProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/AddProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).AddProduct(ctx, req.(*Product))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_UpdateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Product)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).UpdateProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/UpdateProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).UpdateProduct(ctx, req.(*Product))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_DeleteProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).DeleteProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/DeleteProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).DeleteProduct(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_Tes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyStruct)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).Tes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.Service/Tes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).Tes(ctx, req.(*EmptyStruct))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _Service_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "order.Service",
 	HandlerType: (*ServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "service.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AllUser",
+			Handler:    _Service_AllUser_Handler,
+		},
+		{
+			MethodName: "OneUser",
+			Handler:    _Service_OneUser_Handler,
+		},
+		{
+			MethodName: "AddUser",
+			Handler:    _Service_AddUser_Handler,
+		},
+		{
+			MethodName: "UpdateUser",
+			Handler:    _Service_UpdateUser_Handler,
+		},
+		{
+			MethodName: "DeleteUser",
+			Handler:    _Service_DeleteUser_Handler,
+		},
+		{
+			MethodName: "AllOrder",
+			Handler:    _Service_AllOrder_Handler,
+		},
+		{
+			MethodName: "OneOrder",
+			Handler:    _Service_OneOrder_Handler,
+		},
+		{
+			MethodName: "AddOrder",
+			Handler:    _Service_AddOrder_Handler,
+		},
+		{
+			MethodName: "UpdateOrder",
+			Handler:    _Service_UpdateOrder_Handler,
+		},
+		{
+			MethodName: "DeleteOrder",
+			Handler:    _Service_DeleteOrder_Handler,
+		},
+		{
+			MethodName: "AllProduct",
+			Handler:    _Service_AllProduct_Handler,
+		},
+		{
+			MethodName: "OneProduct",
+			Handler:    _Service_OneProduct_Handler,
+		},
+		{
+			MethodName: "AddProduct",
+			Handler:    _Service_AddProduct_Handler,
+		},
+		{
+			MethodName: "UpdateProduct",
+			Handler:    _Service_UpdateProduct_Handler,
+		},
+		{
+			MethodName: "DeleteProduct",
+			Handler:    _Service_DeleteProduct_Handler,
+		},
+		{
+			MethodName: "Tes",
+			Handler:    _Service_Tes_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "service.proto",
 }
