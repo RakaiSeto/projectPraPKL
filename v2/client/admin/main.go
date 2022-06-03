@@ -28,8 +28,11 @@ func main() {
 	g.DELETE("/user/:id", DeleteUser)
 	g.GET("/product", AllProduct)
 	g.GET("/product/:id", OneProduct)
+	g.POST("/product", PostProduct)
+	g.PATCH("/product/:id", PatchProduct)
+	g.DELETE("/product/:id", DeleteProduct)
 
-	if err := g.Run(":8080"); err != nil {
+	if err := g.Run(":8008"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 }

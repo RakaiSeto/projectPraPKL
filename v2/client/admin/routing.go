@@ -124,3 +124,56 @@ func OneProduct(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 }
+
+func PostProduct(ctx *gin.Context) {
+	var product proto.Product
+
+	if err := ctx.BindJSON(&product); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+        return
+    }
+
+	if response, err := Client.AddProduct(ctx, &product); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.JSON(http.StatusConflict, gin.H{"error": "product already exists"})
+	}
+}
+
+func PatchProduct(ctx *gin.Context) {
+	var product proto.Product
+
+	if err := ctx.BindJSON(&product); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+        return
+    }
+
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"status": "Invalid Parameter Id", "error": err.Error()})
+		return
+	}
+
+	product.Id = int64(id)
+
+	if response, err := Client.UpdateProduct(ctx, &product); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "user not found"})
+	}
+}
+
+func DeleteProduct(ctx *gin.Context) {
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"status": "Invalid Parameter Id", "error": err.Error()})
+		return
+	}
+
+	if response, err := Client.DeleteProduct(ctx, &proto.Id{Id: id}); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "product not found"})
+	}
+}
+

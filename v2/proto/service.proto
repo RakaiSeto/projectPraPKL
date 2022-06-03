@@ -76,7 +76,7 @@ service Service {
     rpc OneUser(Id) returns (User);
     rpc AddUser(User) returns (AddUserStatus);
     rpc UpdateUser(User) returns (ResponseStatus);
-    rpc DeleteUser(Id) returns (ResponseStatus);
+    rpc DeleteUser(User) returns (ResponseStatus);
     rpc AllOrder(EmptyStruct) returns (Orders);
     rpc OneOrder(Id) returns (Order);
     rpc AddOrder(Order) returns (AddOrderStatus);

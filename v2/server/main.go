@@ -6,11 +6,10 @@ import (
 
 	user "github.com/RakaiSeto/projectPraPKL/v2/server/user"
 	// order "github.com/RakaiSeto/projectPraPKL/v2/server/order"
-	// product "github.com/RakaiSeto/projectPraPKL/v2/server/product"
+	product "github.com/RakaiSeto/projectPraPKL/v2/server/product"
 	proto "github.com/RakaiSeto/projectPraPKL/v2/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	// product "github.com/RakaiSeto/projectPraPKL/v2/server/product"
 )
 
 type Server struct{
@@ -73,8 +72,50 @@ func (s *Server) UpdateUser(ctx context.Context, userInput *proto.User) (*proto.
 	return response, nil 
 }
 
-func (s *Server) DeleteUser(ctx context.Context, id *proto.Id) (*proto.ResponseStatus, error) {
-	response, err := user.DeleteUser(int(id.GetId()))
+func (s *Server) DeleteUser(ctx context.Context, userInput *proto.User) (*proto.ResponseStatus, error) {
+	response, err := user.DeleteUser(userInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) AllProduct(ctx context.Context, empty *proto.EmptyStruct) (*proto.Products, error) {
+	response, err := product.AllProduct()
+	if err != nil {
+		return nil, err
+	}
+	var returned proto.Products
+	returned.Product = response
+	return &returned, nil 
+}
+
+func (s *Server) OneProduct(ctx context.Context, id *proto.Id) (*proto.Product, error) {
+	response, err := product.OneProduct(int(id.GetId()))
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) AddProduct(ctx context.Context, productInput *proto.Product) (*proto.AddProductStatus, error) {
+	response, err := product.AddProduct(productInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) UpdateProduct(ctx context.Context, productInput *proto.Product) (*proto.ResponseStatus, error) {
+	response, err := product.UpdateProduct(productInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) DeleteProduct(ctx context.Context, id *proto.Id) (*proto.ResponseStatus, error) {
+	response, err := product.DeleteProduct(id)
 	if err != nil {
 		return nil, err
 	}

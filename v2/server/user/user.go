@@ -100,23 +100,33 @@ func UpdateUser(user *proto.User) (*proto.ResponseStatus, error){
 	return &proto.ResponseStatus{Response: "Success"}, nil
 }
 
-func DeleteUser(id int) (*proto.ResponseStatus, error) {
-	row := dbconn.QueryRow("SELECT uname FROM public.user where id=$1", id)
+func DeleteUser(inputUser *proto.User) (*proto.ResponseStatus, error) {
+	row := dbconn.QueryRow("SELECT uname, password FROM public.user where id=$1", inputUser.Id)
 
 	var name string
+	var password string
 	
-	err := row.Scan(&name)
+	err := row.Scan(&name, &password)
 	if err != nil {
 		return nil, err
 	} else if name == "" {
 		varError = fmt.Errorf("user not found")
 		return nil, varError
 	}
+	
+	if inputUser.GetPassword() != password {
+		varError = fmt.Errorf("user not found")
+		fmt.Println(inputUser.GetPassword())
+		fmt.Println(password)
+		return nil, varError
+	}
 
-	_, err = dbconn.Exec("DELETE FROM public.user WHERE id=$1", id)
+	_, err = dbconn.Exec("DELETE FROM public.user WHERE id=$1", inputUser.Id)
 	if err != nil {
 		return nil, err
 	}
 
 	return &proto.ResponseStatus{Response: "Success"}, nil
 }
+
+
