@@ -5,7 +5,7 @@ import (
 	"net"
 
 	user "github.com/RakaiSeto/projectPraPKL/v2/server/user"
-	// order "github.com/RakaiSeto/projectPraPKL/v2/server/order"
+	order "github.com/RakaiSeto/projectPraPKL/v2/server/order"
 	product "github.com/RakaiSeto/projectPraPKL/v2/server/product"
 	proto "github.com/RakaiSeto/projectPraPKL/v2/proto"
 	"google.golang.org/grpc"
@@ -116,6 +116,48 @@ func (s *Server) UpdateProduct(ctx context.Context, productInput *proto.Product)
 
 func (s *Server) DeleteProduct(ctx context.Context, id *proto.Id) (*proto.ResponseStatus, error) {
 	response, err := product.DeleteProduct(id)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) AllOrder(ctx context.Context, userInput *proto.User) (*proto.Orders, error) {
+	response, err := order.AllOrder(userInput)
+	if err != nil {
+		return nil, err
+	}
+	var returned proto.Orders
+	returned.Order = response
+	return &returned, nil 
+}
+
+func (s *Server) OneOrder(ctx context.Context, orderInput *proto.Order) (*proto.Order, error) {
+	response, err := order.OneOrder(orderInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) AddOrder(ctx context.Context, orderInput *proto.Order) (*proto.AddOrderStatus, error) {
+	response, err := order.AddOrder(orderInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) UpdateOrder(ctx context.Context, orderInput *proto.Order) (*proto.ResponseStatus, error) {
+	response, err := order.UpdateOrder(orderInput)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil 
+}
+
+func (s *Server) DeleteOrder(ctx context.Context, orderInput *proto.Order) (*proto.ResponseStatus, error) {
+	response, err := order.DeleteOrder(orderInput)
 	if err != nil {
 		return nil, err
 	}

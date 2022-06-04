@@ -124,3 +124,102 @@ func OneProduct(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 }
+
+func AllOrder(ctx *gin.Context) {
+	var user proto.User
+
+	if err := ctx.BindJSON(&user); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+        return
+    }
+
+	if response, err := Client.AllOrder(ctx, &user); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+	}
+}
+
+func OneOrder(ctx *gin.Context) {
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"status": "Invalid Parameter Id", "error": err.Error()})	
+		return
+	}
+
+	var order proto.Order
+
+	if err := ctx.BindJSON(&order); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+        return
+    }
+
+	order.Id = id
+
+	if response, err := Client.OneOrder(ctx, &order); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+	}
+}
+
+func PostOrder(ctx *gin.Context) {
+	var order proto.Order
+
+	if err := ctx.BindJSON(&order); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+        return
+    }
+
+	if response, err := Client.AddOrder(ctx, &order); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.JSON(http.StatusConflict, gin.H{"error": err})
+	}
+}
+
+func PatchOrder(ctx *gin.Context) {
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"status": "Invalid Parameter Id", "error": err.Error()})	
+		return
+	}
+
+	var order proto.Order
+
+	if err := ctx.BindJSON(&order); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+        return
+    }
+
+	order.Id = id
+
+	if response, err := Client.UpdateOrder(ctx, &order); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.JSON(http.StatusConflict, gin.H{"error": "order doesn't exist or password wrong"})
+	}
+}
+
+func DeleteOrder(ctx *gin.Context) {
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"status": "Invalid Parameter Id", "error": err.Error()})	
+		return
+	}
+
+	var order proto.Order
+
+	if err := ctx.BindJSON(&order); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+        return
+    }
+
+	order.Id = id
+
+	if response, err := Client.DeleteOrder(ctx, &order); err == nil {
+		ctx.IndentedJSON(http.StatusOK, response)
+	} else {	
+		ctx.JSON(http.StatusConflict, gin.H{"error": "order doesn't exist or password wrong"})
+	}
+}

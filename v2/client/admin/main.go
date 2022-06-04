@@ -31,6 +31,11 @@ func main() {
 	g.POST("/product", PostProduct)
 	g.PATCH("/product/:id", PatchProduct)
 	g.DELETE("/product/:id", DeleteProduct)
+	g.GET("/order", AllOrder)
+	g.GET("/order/:id", OneOrder)
+	g.POST("/order", PostOrder)
+	g.PATCH("/order/:id", PatchOrder)
+	g.DELETE("/order/:id", DeleteOrder)
 
 	if err := g.Run(":8008"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)

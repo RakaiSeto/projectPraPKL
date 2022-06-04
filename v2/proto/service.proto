@@ -28,9 +28,10 @@ message AddUserStatus {
 message Order {
     int64 id = 1;
     int64 userid = 2;
-    int64 productid = 3;
-    int64 quantity = 4;
-    int64 totalprice = 5;
+    optional string userpassword = 3;
+    int64 productid = 4;
+    int64 quantity = 5;
+    int64 totalprice = 6;
 }
 
 message Orders {
@@ -77,11 +78,11 @@ service Service {
     rpc AddUser(User) returns (AddUserStatus);
     rpc UpdateUser(User) returns (ResponseStatus);
     rpc DeleteUser(User) returns (ResponseStatus);
-    rpc AllOrder(EmptyStruct) returns (Orders);
-    rpc OneOrder(Id) returns (Order);
+    rpc AllOrder(User) returns (Orders);
+    rpc OneOrder(Order) returns (Order);
     rpc AddOrder(Order) returns (AddOrderStatus);
     rpc UpdateOrder(Order) returns (ResponseStatus);
-    rpc DeleteOrder(Id) returns (ResponseStatus);
+    rpc DeleteOrder(Order) returns (ResponseStatus);
     rpc AllProduct(EmptyStruct) returns (Products);
     rpc OneProduct(Id) returns (Product);
     rpc AddProduct(Product) returns (AddProductStatus);
