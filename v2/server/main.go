@@ -98,7 +98,7 @@ func (s *Server) OneProduct(ctx context.Context, id *proto.Id) (*proto.Product, 
 	return response, nil 
 }
 
-func (s *Server) AddProduct(ctx context.Context, productInput *proto.Product) (*proto.AddProductStatus, error) {
+func (s *Server) AddProduct(ctx context.Context, productInput *proto.AdminProduct) (*proto.AddProductStatus, error) {
 	response, err := product.AddProduct(productInput)
 	if err != nil {
 		return nil, err
@@ -106,7 +106,7 @@ func (s *Server) AddProduct(ctx context.Context, productInput *proto.Product) (*
 	return response, nil 
 }
 
-func (s *Server) UpdateProduct(ctx context.Context, productInput *proto.Product) (*proto.ResponseStatus, error) {
+func (s *Server) UpdateProduct(ctx context.Context, productInput *proto.AdminProduct) (*proto.ResponseStatus, error) {
 	response, err := product.UpdateProduct(productInput)
 	if err != nil {
 		return nil, err
@@ -114,8 +114,8 @@ func (s *Server) UpdateProduct(ctx context.Context, productInput *proto.Product)
 	return response, nil 
 }
 
-func (s *Server) DeleteProduct(ctx context.Context, id *proto.Id) (*proto.ResponseStatus, error) {
-	response, err := product.DeleteProduct(id)
+func (s *Server) DeleteProduct(ctx context.Context, productInput *proto.AdminProduct) (*proto.ResponseStatus, error) {
+	response, err := product.DeleteProduct(productInput)
 	if err != nil {
 		return nil, err
 	}

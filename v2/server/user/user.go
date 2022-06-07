@@ -2,15 +2,16 @@ package user
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
+	"errors"
+	"strings"
 
 	"github.com/RakaiSeto/projectPraPKL/v2/db"
 	proto "github.com/RakaiSeto/projectPraPKL/v2/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var dbconn *sql.DB
-var varError error
 
 func init() {
 	dbconn = db.Db
@@ -19,7 +20,7 @@ func init() {
 func AllUser() ([]*proto.User, error) {
 	rows, err := dbconn.Query("SELECT id, uname, email, role FROM public.user")
 	if err != nil {
-		fmt.Println(err)
+		return nil, status.Error(codes.Code(2), err.Error())
 	}
 	defer rows.Close()
 
@@ -28,7 +29,7 @@ func AllUser() ([]*proto.User, error) {
 		var user proto.User
 		err := rows.Scan(&user.Id, &user.Uname, &user.Email, &user.Role)
 		if err != nil {
-			return nil, err
+			return nil, status.Error(codes.Code(2), err.Error())
 		}
 
 		users = append(users, &user)
@@ -43,9 +44,11 @@ func OneUser(id int) (*proto.User, error) {
 	user := proto.User{}
 	err := row.Scan(&user.Id, &user.Uname, &user.Email, &user.Role)
 	if err != nil {
-		return nil, err
+		if strings.Contains(err.Error(), "no rows in result set"){
+			return nil, status.Error(codes.Code(5), "user not found")
+		}
+		return nil, status.Error(codes.Code(2), err.Error())
 	}
-
 	return &user, nil
 }
 
@@ -55,22 +58,18 @@ func AddUser(user *proto.User) (*proto.AddUserStatus, error) {
 	user.Role = "customer"
 	err := row.Scan(&i)
 	if i != 0 {
-		return nil, err
+		return nil, status.Error(codes.Code(6), "user already exists, please change its uname")
 	}
 	
 	_, err = dbconn.Exec("INSERT INTO public.user (uname, email, password, role) VALUES ($1, $2, $3, $4)", user.GetUname(), user.GetEmail(), user.GetPassword(), "customer")
 	if err != nil {
-		errString := err.Error()
-		resp := proto.AddUserStatus{Response: "failed", Error: &errString}
-		return &resp, sql.ErrConnDone
+		return nil, status.Error(codes.Code(2), err.Error())
 	}
 
 	row = dbconn.QueryRow("SELECT id FROM public.user WHERE uname=$1", user.GetUname())
 	err = row.Scan(&user.Id)
 	if err != nil {
-		errString := err.Error()
-		resp := proto.AddUserStatus{Response: "failed", Error: &errString}
-		return &resp, sql.ErrConnDone
+		return nil, status.Error(codes.Code(2), err.Error())
 	}
 
 	resp := proto.AddUserStatus{Response: "success", User: user}
@@ -83,8 +82,10 @@ func UpdateUser(user *proto.User) (*proto.ResponseStatus, error){
 	row := dbconn.QueryRow("SELECT * from public.user where id = $1", user.Id)
 	err := row.Scan(&QueryUser.Id, &QueryUser.Uname, &QueryUser.Email, &QueryUser.Password, &QueryUser.Role)
 	if err != nil {
-		log.Println(err)
-		return nil, err
+		if strings.Contains(err.Error(), "no rows in result set"){
+			return nil, status.Error(codes.Code(5), "user not found")
+		}
+		return nil, status.Error(codes.Code(2), err.Error())
 	}
 
 	if user.Uname != "" {QueryUser.Uname = user.Uname}
@@ -93,8 +94,7 @@ func UpdateUser(user *proto.User) (*proto.ResponseStatus, error){
 
 	_, err = dbconn.Exec("UPDATE public.user SET uname=$2, email=$3, password=$4 WHERE id=$1", QueryUser.Id, QueryUser.Uname, QueryUser.Email, QueryUser.Password)
 	if err != nil {
-		varError = err
-		return nil, varError
+		return nil, status.Error(codes.Code(2), err.Error())
 	}
 
 	return &proto.ResponseStatus{Response: "Success"}, nil
@@ -108,22 +108,23 @@ func DeleteUser(inputUser *proto.User) (*proto.ResponseStatus, error) {
 	
 	err := row.Scan(&name, &password)
 	if err != nil {
-		return nil, err
-	} else if name == "" {
-		varError = fmt.Errorf("user not found")
-		return nil, varError
+		return nil, status.Error(codes.Code(2), err.Error())
+	}
+
+	if name == ""{
+		return nil, status.Error(codes.Code(5), "user not found")
 	}
 	
 	if inputUser.GetPassword() != password {
-		varError = fmt.Errorf("user not found")
-		fmt.Println(inputUser.GetPassword())
-		fmt.Println(password)
-		return nil, varError
+		if inputUser.GetPassword() == "" {
+			return nil, errors.New("please include password in request")
+		}
+		return nil, errors.New("wrong password for user")
 	}
 
 	_, err = dbconn.Exec("DELETE FROM public.user WHERE id=$1", inputUser.Id)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Code(2), err.Error())
 	}
 
 	return &proto.ResponseStatus{Response: "Success"}, nil

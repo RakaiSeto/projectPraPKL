@@ -5,6 +5,11 @@ package order;
 option go_package = "/service";
 message EmptyStruct {}
 
+message Error {
+    optional int64 code = 1;
+    string message = 2;
+}
+
 // USER
 message User {
     int64 id = 1;
@@ -21,7 +26,7 @@ message Users {
 message AddUserStatus {
     string response = 1;
     User User = 2;
-    optional string error = 3;
+    optional Error error = 3;
 }
 
 // ORDER
@@ -44,13 +49,13 @@ message Id {
 
 message ResponseStatus {
     string response = 1;
-    optional string error = 2;
+    optional Error error = 2;
 }
 
 message AddOrderStatus {
     string response = 1;
     Order Order = 2;
-    optional string error = 3;
+    optional Error error = 3;
 }
 
 // PRODUCT
@@ -61,14 +66,23 @@ message Product {
     int64 price = 4;
 }
 
+message AdminProduct {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    int64 price = 4;
+    int64 adminid = 5;
+    string adminpass = 6;
+}
+
 message Products {
     repeated Product Product = 1;
 }
 
 message AddProductStatus {
     string response = 1;
-    Product Product = 2;
-    optional string error = 3;
+    AdminProduct AdminProduct = 2;
+    optional Error error = 3;
 }
 
 // SERVICE GATEAWAY
@@ -85,8 +99,8 @@ service Service {
     rpc DeleteOrder(Order) returns (ResponseStatus);
     rpc AllProduct(EmptyStruct) returns (Products);
     rpc OneProduct(Id) returns (Product);
-    rpc AddProduct(Product) returns (AddProductStatus);
-    rpc UpdateProduct(Product) returns (ResponseStatus);
-    rpc DeleteProduct(Id) returns (ResponseStatus);
+    rpc AddProduct(AdminProduct) returns (AddProductStatus);
+    rpc UpdateProduct(AdminProduct) returns (ResponseStatus);
+    rpc DeleteProduct(AdminProduct) returns (ResponseStatus);
     rpc Tes(EmptyStruct) returns (ResponseStatus);
 }
