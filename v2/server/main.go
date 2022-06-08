@@ -4,10 +4,10 @@ import (
 	"context"
 	"net"
 
-	user "github.com/RakaiSeto/projectPraPKL/v2/server/user"
+	proto "github.com/RakaiSeto/projectPraPKL/v2/proto"
 	order "github.com/RakaiSeto/projectPraPKL/v2/server/order"
 	product "github.com/RakaiSeto/projectPraPKL/v2/server/product"
-	proto "github.com/RakaiSeto/projectPraPKL/v2/proto"
+	user "github.com/RakaiSeto/projectPraPKL/v2/server/user"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

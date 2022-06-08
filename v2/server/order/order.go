@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/RakaiSeto/projectPraPKL/v2/db"
-	proto "github.com/RakaiSeto/projectPraPKL/v2/server/proto"
+	proto "github.com/RakaiSeto/projectPraPKL/v2/proto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
