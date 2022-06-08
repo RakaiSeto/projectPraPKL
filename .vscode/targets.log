@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jun 07 21:07:14 2022
+# Make data base, printed on Wed Jun 08 12:34:35 2022
 
 # Variables
 
@@ -23,7 +23,7 @@ USERPROFILE = C:\Users\rakai
 # environment
 LOCALAPPDATA = C:\Users\rakai\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-441bee43-82d7-4b7a-bb48-9e917ee4dc3c-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-5a51b281-7db2-4c52-9e9b-340aeec1581b-sock
 # environment
 VSCODE_CWD = C:\Users\rakai\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -41,7 +41,7 @@ GOPATH = C:\Users\rakai\go
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_8808_FAVLDESGVLNDAUQM
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_11132_VKXPJQAIOOMRTWOA
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -99,7 +99,7 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 8808
+VSCODE_PID = 11132
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # environment
@@ -291,12 +291,11 @@ GNUmakefile:
 # No general ('VPATH' variable) search path.
 
 # strcache buffers: 1 (0) / strings = 14 / storage = 94 B / avg = 6 B
-# current buf: size = 8174 B / us 
-ed = 94 B / count = 14 / avg = 6 B
+# current buf: size = 8174 B / used = 94 B / count = 14 / avg = 6 B
 
 # strcache performance: lookups = 17 / hit rate = 17%
 # hash-table stats:
 # Load=14/8192=0%, Rehash=0, Collisions=0/17=0%
-# Finished Make data base on Tue Jun 07 21:07:14 2022
+# Finished Make data base on Wed Jun 08 12:34:35 2022
 
  
